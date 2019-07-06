@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $path= gethostbyname($_SERVER['SERVER_NAME']);
 
-$config['base_url'] = 'http://'.$path.'/grs/';
+$config['base_url'] = 'http://'.$path.'/grs_ci/';
 
 /*
 |--------------------------------------------------------------------------

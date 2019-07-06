@@ -7164,8 +7164,8 @@ button.bg-dark:focus {
   position: fixed;
   top: 0;
   right: 0;
-  left: 0;
-  z-index: 1030;
+  left: 261px;
+  z-index: 1029;
 }
 
 .fixed-bottom {
@@ -13137,7 +13137,7 @@ fieldset[disabled] .form-group .form-control {
 
 .navbar.navbar-absolute {
   position: absolute;
-  width: 100%;
+  width: calc(100%-260px);
   padding-top: 10px;
   z-index: 1029;
 }
@@ -14361,7 +14361,13 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 }
 
 .footer {
-  padding: 0.9375rem 0;
+  position: fixed;
+  overflow: auto;
+  z-index: 999;
+  bottom: 0px;
+  width: 84%;
+  background-color: purple;
+  color: white;
   text-align: center;
   display: -webkit-flex;
   /* Safari */

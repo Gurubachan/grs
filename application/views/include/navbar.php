@@ -13,18 +13,18 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active  ">
-            <a class="nav-link" href="./dashboard.html">
+            <a class="nav-link" href="./Dashboard">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="./user.html">
+          <li class="nav-item active">
+            <a class="nav-link" onclick="getGrievance()" href="#">
               <i class="material-icons">person</i>
-              <p>User Profile</p>
+              <p>Grievance</p>
             </a>
           </li>
-          <li class="nav-item ">
+          <!--<li class="nav-item ">
             <a class="nav-link" href="./tables.html">
               <i class="material-icons">content_paste</i>
               <p>Table List</p>
@@ -65,13 +65,13 @@
               <i class="material-icons">unarchive</i>
               <p>Think Simple</p>
             </a>
-          </li>
+          </li>-->
         </ul>
       </div>
     </div>
     <div class="main-panel">
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+      <nav class="navbar navbar-expand-lg   fixed-top ">
         <div class="container-fluid">
           <div class="navbar-wrapper">
             <a class="navbar-brand" href="#pablo">Dashboard</a>
@@ -136,5 +136,4 @@
         </div>
       </nav>
       <!-- End Navbar -->
-      
       

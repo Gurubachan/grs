@@ -1,6 +1,8 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined("BASEPATH") or exit('No direct script access allowed.');
+date_default_timezone_set("Asia/Kolkata");
+header("Access-Control-Allow-Origin: *");
 
 class Dashboard extends CI_Controller {
 

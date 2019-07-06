@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content" id="loadContaint">
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
@@ -7,9 +7,8 @@
                   <div class="card-icon">
                     <i class="material-icons">content_copy</i>
                   </div>
-                  <p class="card-category">Used Space</p>
+                  <p class="card-category">Resolve</p>
                   <h3 class="card-title">49/50
-                    <small>GB</small>
                   </h3>
                 </div>
                 <div class="card-footer">
@@ -26,8 +25,8 @@
                   <div class="card-icon">
                     <i class="material-icons">store</i>
                   </div>
-                  <p class="card-category">Revenue</p>
-                  <h3 class="card-title">$34,245</h3>
+                  <p class="card-category">Pending</p>
+                  <h3 class="card-title">34,245</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -42,7 +41,7 @@
                   <div class="card-icon">
                     <i class="material-icons">info_outline</i>
                   </div>
-                  <p class="card-category">Fixed Issues</p>
+                  <p class="card-category">Process</p>
                   <h3 class="card-title">75</h3>
                 </div>
                 <div class="card-footer">
@@ -58,7 +57,7 @@
                   <div class="card-icon">
                     <i class="fa fa-twitter"></i>
                   </div>
-                  <p class="card-category">Followers</p>
+                  <p class="card-category">Total</p>
                   <h3 class="card-title">+245</h3>
                 </div>
                 <div class="card-footer">
@@ -76,7 +75,7 @@
                   <div class="ct-chart" id="dailySalesChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Daily Sales</h4>
+                  <h4 class="card-title">Daily Grievence</h4>
                   <p class="card-category">
                     <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
                 </div>
@@ -93,7 +92,7 @@
                   <div class="ct-chart" id="websiteViewsChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Email Subscriptions</h4>
+                  <h4 class="card-title">Email Grievence</h4>
                   <p class="card-category">Last Campaign Performance</p>
                 </div>
                 <div class="card-footer">
@@ -109,7 +108,7 @@
                   <div class="ct-chart" id="completedTasksChart"></div>
                 </div>
                 <div class="card-body">
-                  <h4 class="card-title">Completed Tasks</h4>
+                  <h4 class="card-title">Completed Grievence</h4>
                   <p class="card-category">Last Campaign Performance</p>
                 </div>
                 <div class="card-footer">
@@ -126,23 +125,23 @@
                 <div class="card-header card-header-tabs card-header-primary">
                   <div class="nav-tabs-navigation">
                     <div class="nav-tabs-wrapper">
-                      <span class="nav-tabs-title">Tasks:</span>
+                      <span class="nav-tabs-title">Report:</span>
                       <ul class="nav nav-tabs" data-tabs="tabs">
                         <li class="nav-item">
                           <a class="nav-link active" href="#profile" data-toggle="tab">
-                            <i class="material-icons">bug_report</i> Bugs
+                            <i class="material-icons">bug_report</i> All
                             <div class="ripple-container"></div>
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#messages" data-toggle="tab">
-                            <i class="material-icons">code</i> Website
+                            <i class="material-icons">code</i> Pending
                             <div class="ripple-container"></div>
                           </a>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#settings" data-toggle="tab">
-                            <i class="material-icons">cloud</i> Server
+                            <i class="material-icons">cloud</i> Resolved
                             <div class="ripple-container"></div>
                           </a>
                         </li>
@@ -369,7 +368,7 @@
             <div class="col-lg-6 col-md-12">
               <div class="card">
                 <div class="card-header card-header-warning">
-                  <h4 class="card-title">Employees Stats</h4>
+                  <h4 class="card-title">Grievence Status</h4>
                   <p class="card-category">New employees on 15th September, 2016</p>
                 </div>
                 <div class="card-body table-responsive">
@@ -377,33 +376,33 @@
                     <thead class="text-warning">
                       <th>ID</th>
                       <th>Name</th>
-                      <th>Salary</th>
-                      <th>Country</th>
+                      <th>Subject</th>
+                      <th>Status</th>
                     </thead>
                     <tbody>
                       <tr>
                         <td>1</td>
                         <td>Dakota Rice</td>
                         <td>$36,738</td>
-                        <td>Niger</td>
+                        <td>Pending</td>
                       </tr>
                       <tr>
                         <td>2</td>
                         <td>Minerva Hooper</td>
                         <td>$23,789</td>
-                        <td>Curaçao</td>
+                        <td>Resolved</td>
                       </tr>
                       <tr>
                         <td>3</td>
                         <td>Sage Rodriguez</td>
                         <td>$56,142</td>
-                        <td>Netherlands</td>
+                        <td>Rejected</td>
                       </tr>
                       <tr>
                         <td>4</td>
                         <td>Philip Chaney</td>
                         <td>$38,735</td>
-                        <td>Korea, South</td>
+                        <td>Resolved</td>
                       </tr>
                     </tbody>
                   </table>
@@ -414,73 +413,29 @@
         </div>
       </div>
 
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
 
-  <div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-      <a href="#" data-toggle="dropdown">
-        <i class="fa fa-cog fa-2x"> </i>
-      </a>
-      <ul class="dropdown-menu">
-        <li class="header-title"> Sidebar Filters</li>
-        <li class="adjustments-line">
-          <a href="javascript:void(0)" class="switch-trigger active-color">
-            <div class="badge-colors ml-auto mr-auto">
-              <span class="badge filter badge-purple" data-color="purple"></span>
-              <span class="badge filter badge-azure" data-color="azure"></span>
-              <span class="badge filter badge-green" data-color="green"></span>
-              <span class="badge filter badge-warning" data-color="orange"></span>
-              <span class="badge filter badge-danger" data-color="danger"></span>
-              <span class="badge filter badge-rose active" data-color="rose"></span>
-            </div>
-            <div class="clearfix"></div>
-          </a>
-        </li>
-        <li class="header-title">Images</li>
-        <li class="active">
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-1.jpg" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-2.jpg" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-3.jpg" alt="">
-          </a>
-        </li>
-        <li>
-          <a class="img-holder switch-trigger" href="javascript:void(0)">
-            <img src="../assets/img/sidebar-4.jpg" alt="">
-          </a>
-        </li>
-        <li class="button-container">
-          <a href="https://www.creative-tim.com/product/material-dashboard" target="_blank" class="btn btn-primary btn-block">Free Download</a>
-        </li>
-        <!-- <li class="header-title">Want more components?</li>
-            <li class="button-container">
-                <a href="https://www.creative-tim.com/product/material-dashboard-pro" target="_blank" class="btn btn-warning btn-block">
-                  Get the pro version
-                </a>
-            </li> -->
-        <li class="button-container">
-          <a href="https://demos.creative-tim.com/material-dashboard/docs/2.1/getting-started/introduction.html" target="_blank" class="btn btn-default btn-block">
-            View Documentation
-          </a>
-        </li>
-        <li class="button-container github-star">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star ntkme/github-buttons on GitHub">Star</a>
-        </li>
-        <li class="header-title">Thank you for 95 shares!</li>
-        <li class="button-container text-center">
-          <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-          <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-          <br>
-          <br>
-        </li>
-      </ul>
-    </div>
-  </div>
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<!--<h4 class="modal-title">Modal Heading</h4>-->
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+
+			<!-- Modal body -->
+			<div class="modal-body" id="containtLoadHere">
+
+			</div>
+
+			<!-- Modal footer -->
+			<!--<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+			</div>-->
+
+		</div>
+	</div>
+</div>
+
 

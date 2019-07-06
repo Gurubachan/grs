@@ -1,6 +1,6 @@
-<footer class="footer">
-        <div class="container-fluid">
-          <nav class="float-left">
+<footer class="footer" >
+        <div class="container-fluid" >
+          <nav class="float-left" >
             <ul>
               <li>
                 <a href="https://www.creative-tim.com">
@@ -39,6 +39,7 @@
   <script src="<?= base_url('assets/js/core/jquery.min.js')?>"></script>
   <script src="<?= base_url('assets/js/core/popper.min.js')?>"></script>
   <script src="<?= base_url('assets/js/core/bootstrap-material-design.min.js')?>"></script>
+
   <script src="<?= base_url('assets/js/plugins/perfect-scrollbar.jquery.min.js')?>"></script>
   <!-- Plugin for the momentJs  -->
   <script src="<?= base_url('assets/js/plugins/moment.min.js')?>"></script>
@@ -78,6 +79,7 @@
   <script src="<?= base_url('assets/js/material-dashboard.js?v=2.1.1" type="text/javascript')?>"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="<?= base_url('assets/demo/demo.js')?>"></script>
+  <script src="<?= base_url('assets/js/app.js')?>"></script>
   <script>
     $(document).ready(function() {
       $().ready(function() {
