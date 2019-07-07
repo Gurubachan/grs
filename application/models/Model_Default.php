@@ -19,7 +19,10 @@ class Model_Default extends CI_Model{
 				2=>'tbl_sernder_receiver_type',
 				3=>'tbl_sender_receiver_address',
 				4=>'tbl_source',
-				5=>'tbl_grievence'
+				5=>'tbl_grievence',
+				6=>'tbl_ministry',
+				7=>'tbl_psu',
+				8=>'tbl_department'
 
             );
             if($table[$tblno]){

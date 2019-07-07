@@ -40,16 +40,46 @@
                         </div>
                       </div>
                     </div>
-
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Subject</label>
-                          <input type="text" class="form-control" name="txtSubject">
-                        </div>
-                      </div>
-					</div>
 					  <div class="row">
+						  <div class="col-md-4">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Ministry</label>
+								  <select name="cboMinistry" id="cboMinistry" class="form-control" onchange="callMinistryForm(this)">
+									  <option value="">Select</option>
+									  <option value="na">Not in list</option>
+								  </select>
+							  </div>
+						  </div>
+						  <div class="col-md-4">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">PSU</label>
+								  <select name="cbopsu" id="cbopsu" class="form-control" onchange="callPSUForm(this)">
+									  <option value="">Select</option>
+									  <option value="na">Not in list</option>
+								  </select>
+							  </div>
+						  </div>
+						  <div class="col-md-4">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Department</label>
+								  <select name="cboDepartment" id="cboDepartment" class="form-control" onchange="callDepartment(this)">
+									  <option value="">Select</option>
+									  <option value="na">Not in list</option>
+								  </select>
+							  </div>
+						  </div>
+					  </div>
+
+					  <div class="row">
+						  <div class="col-md-6">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Source</label>
+								  <select name="cboSource" id="cboSource" class="form-control" onchange="callSourceForm(this)">
+									  <option value="">Select</option>
+									  <option value="na">Not in list</option>
+								  </select>
+							  </div>
+						  </div>
                       <div class="col-md-6">
                         <div class="form-group">
 							<br>
@@ -57,16 +87,16 @@
                           <input type="text" class="form-control" name="txtReferance">
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label class="bmd-label-floating">Source</label>
-                          <select name="cboSource" id="cboSource" class="form-control" onchange="callSourceForm(this)">
-							  <option value="">Select</option>
-							  <option value="na">Not in list</option>
-						  </select>
-                        </div>
-                      </div>
+
                     </div>
+					  <div class="row">
+						  <div class="col-md-12">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Subject</label>
+								  <input type="text" class="form-control" name="txtSubject">
+							  </div>
+						  </div>
+					  </div>
                     <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">

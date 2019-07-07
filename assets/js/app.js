@@ -12,7 +12,9 @@ function getGrievance() {
 			loadSenderReceiver('cboFrom',null,1);
 			loadSenderReceiver('cboTo',null,2);
 			loadSource('cboSource');
+			loadMinistry('cboMinistry');
 			loadGrievences('allGrievence');
+
 		}
 	});
 }
@@ -81,7 +83,7 @@ function submitToServer(formid,e) {
 					appendcontrol="allGrievence";
 				}
 				loadDataAsPerRequest(appendcontrol,successresponse);
-
+				$(frm).trigger('reset');
 				$("#myModal").modal('hide');
 				$("#containtLoadHere").html('');
 			}
@@ -103,14 +105,18 @@ function loadDataAsPerRequest(divid,responsedata) {
 		case "cboSource":
 			loadSource(divid,responsedata);
 			break;
-		case "frmGrievence":
+		case "allGrievence":
 			loadGrievences(divid,responsedata);
 			break;
-		case 5:
-			day = "Friday";
+		case "cboMinistry":
+			loadMinistry(divid,responsedata);
 			break;
-		case  6:
-			day = "Saturday";
+		case  "cbopsu":
+			loadPSU(divid,responsedata);
+			break;
+		case "cboDepartment" :
+			loadDepartment(divid,responsedata);
+			break;
 	}
 	//return day;
 }
@@ -156,7 +162,6 @@ function loadSenderReceiver(dataloadingid=null,responsevalue=null,sendertype=nul
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
-
 			}
 		}
 	});
@@ -238,6 +243,147 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 						"\t\t\t\t\t\t\t\t\t</button>\n" +
 						"\t\t\t\t\t\t\t\t</td>\n" +
 						"\t\t\t\t\t\t\t</tr>";
+				}
+				//console.log(html);
+				$("#"+dataloadingid).html(html);
+				if(responsevalue!=null){
+					//alert(dataloadingid);
+					$("#"+dataloadingid).val(responsevalue);
+				}
+			}
+		}
+	});
+}
+var ministryid=null;
+function callMinistryForm(t) {
+	if (t.value == "na") {
+		$("#myModal").modal().show();
+		$.ajax({
+			type: "GET",
+			url: "./Ministry/loadForm",
+			data: null,
+			success: function (d) {
+				//console.log(d);
+				$("#containtLoadHere").html(d);
+				$(".x").removeClass('col-md-6').addClass('col-md-12');
+				appendcontrol = t.id;
+				//$("#cboSenderReceiver").attr('disabled',true);
+
+			}
+		});
+	}else {
+		ministryid=t.value;
+		if(t.value!=""){
+			loadPSU('cbopsu');
+		}
+	}
+}
+function loadMinistry(dataloadingid=null, responsevalue=null) {
+	$.ajax({
+		type: "GET",
+		url: "./Ministry/select",
+		data: null,
+		success: function (d) {
+			var responsedate=JSON.parse(d);
+			if(responsedate.success==true){
+				var html="<option value=\"\">Select Ministry</option>\n" +
+					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+				var data=responsedate.response;
+				for (var i=0; i<data.length;i++){
+					html+="<option value="+data[i].id+">"+data[i].ministry+"</option>";
+				}
+				//console.log(html);
+				$("#"+dataloadingid).html(html);
+				if(responsevalue!=null){
+					//alert(dataloadingid);
+					$("#"+dataloadingid).val(responsevalue);
+				}
+			}
+		}
+	});
+}
+
+var psuid=null;
+function callPSUForm(t) {
+	if (t.value == "na") {
+		$("#myModal").modal().show();
+		$.ajax({
+			type: "GET",
+			url: "./PSU/loadForm",
+			data: null,
+			success: function (d) {
+				//console.log(d);
+				$("#containtLoadHere").html(d);
+				$(".x").removeClass('col-md-6').addClass('col-md-12');
+				appendcontrol = t.id;
+				//$("#cboSenderReceiver").attr('disabled',true);
+
+				loadMinistry('cboMinistryforPSU',ministryid);
+
+			}
+		});
+	}else {
+		psuid=t.value;
+		if(t.value!=""){
+			loadDepartment('cboDepartment');
+		}
+	}
+}
+function loadPSU(dataloadingid=null, responsevalue=null) {
+	$.ajax({
+		type: "POST",
+		url: "./PSU/select",
+		data: {'ministryid':ministryid},
+		success: function (d) {
+			var responsedate=JSON.parse(d);
+			if(responsedate.success==true){
+				var html="<option value=\"\">Select PSU</option>\n" +
+					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+				var data=responsedate.response;
+				for (var i=0; i<data.length;i++){
+					html+="<option value="+data[i].id+">"+data[i].psuname+"</option>";
+				}
+				//console.log(html);
+				$("#"+dataloadingid).html(html);
+				if(responsevalue!=null){
+					//alert(dataloadingid);
+					$("#"+dataloadingid).val(responsevalue);
+				}
+			}
+		}
+	});
+}
+function callDepartment(t) {
+	if (t.value == "na") {
+		$("#myModal").modal().show();
+		$.ajax({
+			type: "GET",
+			url: "./Department/loadForm",
+			data: null,
+			success: function (d) {
+				//console.log(d);
+				$("#containtLoadHere").html(d);
+				$(".x").removeClass('col-md-6').addClass('col-md-12');
+				appendcontrol = t.id;
+				//$("#cboSenderReceiver").attr('disabled',true);
+				loadPSU('cboPsuforDepartment',psuid);
+			}
+		});
+	}
+}
+function loadDepartment(dataloadingid=null, responsevalue=null) {
+	$.ajax({
+		type: "POST",
+		url: "./Department/select",
+		data: {'psuid':psuid},
+		success: function (d) {
+			var responsedate=JSON.parse(d);
+			if(responsedate.success==true){
+				var html="<option value=\"\">Select Department</option>\n" +
+					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+				var data=responsedate.response;
+				for (var i=0; i<data.length;i++){
+					html+="<option value="+data[i].id+">"+data[i].dname+"</option>";
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);

@@ -8,8 +8,7 @@
                     <i class="material-icons">content_copy</i>
                   </div>
                   <p class="card-category">Resolve</p>
-                  <h3 class="card-title">49/50
-                  </h3>
+                  <h3 class="card-title">25</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -26,7 +25,7 @@
                     <i class="material-icons">store</i>
                   </div>
                   <p class="card-category">Pending</p>
-                  <h3 class="card-title">34,245</h3>
+                  <h3 class="card-title">245</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
@@ -58,7 +57,7 @@
                     <i class="fa fa-twitter"></i>
                   </div>
                   <p class="card-category">Total</p>
-                  <h3 class="card-title">+245</h3>
+                  <h3 class="card-title">345</h3>
                 </div>
                 <div class="card-footer">
                   <div class="stats">
