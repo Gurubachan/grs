@@ -51,15 +51,19 @@ class Grievance extends CI_Controller
 					'isactive'=>1
 				);
 				$response=$this->Model_Default->insert(5,$data);
-				if($response!=false){
-					$message=array('success'=>true,'response'=>$response);
+				if($response['success']!=false){
+					$message=array('success'=>true,'response'=>$response['message']);
 				}else{
-					$message=array('success'=>false);
+					$message=$response;
 				}
 				echo json_encode($message);
 			}
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>true,
+				'message'=>$this->db->affected_rows()
+			);
+			echo json_encode($message);
 		}
 	}
 
@@ -67,13 +71,17 @@ class Grievance extends CI_Controller
 		try{
 			$response=$this->Model_Default->select(5);
 			if($response!=false){
-				$message=array('success'=>true,'response'=>$response);
+				$message=array('success'=>true,'response'=>$response['message']);
 			}else{
-				$message=array('success'=>false);
+				$message=$response;
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>true,
+				'message'=>$this->db->affected_rows()
+			);
+			echo json_encode($message);
 		}
 	}
 
@@ -96,16 +104,25 @@ class Grievance extends CI_Controller
 					'isactive'=>1
 				);
 				$response=$this->Model_Default->insert(1,$data);
-				if($response!=false){
-					$message=array('success'=>true,'response'=>$response);
+				if($response['response']!=false){
+					$message=array('response'=>true,'message'=>$response['message']);
 				}else{
-					$message=array('success'=>false);
+					$message=$response;
 				}
-				echo json_encode($message);
-			}
 
+			}else{
+				$message=array(
+					'response'=>false,
+					'message'=>'Invalid request send.'
+				);
+			}
+			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>true,
+				'message'=>$this->db->affected_rows()
+			);
+			echo json_encode($message);
 		}
 	}
 
@@ -118,15 +135,23 @@ class Grievance extends CI_Controller
 				$where='isactive=1';
 			}
 			$response=$this->Model_Default->select(1,$where);
-			if($response!=false){
-				$message=array('success'=>true,'response'=>$response);
+			if($response['response']!=false){
+				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
-				$message=array('success'=>false);
+				$message=$response;
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
 	}
 
+	public function test(){
+		//echo "hi";
+		echo json_encode($_POST);
+	}
 }

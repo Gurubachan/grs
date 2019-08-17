@@ -21,39 +21,70 @@ class Ministry extends CI_Controller
 	}
 	public function insert(){
 		try{
+
+			/*if(is_array($_POST)){
+				$postdata = file_get_contents("php://input");
+				echo $postdata;
+				$request = json_decode($postdata);
+				print_r($request);
+
+			}else{
+				echo "Array not found";
+			}
+			exit();*/
 			if(isset($_POST)){
 				extract($_POST);
 				$data[]=array(
+					'stid'=>$cboSendto,
 					'ministry'=>ucwords($txtName),
 					'entryby'=>1,
 					'isactive'=>1
 				);
 
 			$response=$this->Model_Default->insert(6,$data);
-			if($response!=false){
-				$mesage=array('success'=>true,'response'=>$response);
+			if($response['response']!=false){
+				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
-				$mesage=array('success'=>false);
+				$message=$response;
 			}
-			echo json_encode($mesage);
+
+			}else{
+				$message=array(
+					'response'=>false,
+					'message'=>'Invalid post data'
+				);
 			}
+			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
+
 	}
 
 	public function select(){
 		try{
 			$where=null;
+			if(isset($_POST['sendtoid']) && $_POST['sendtoid']!=""){
+				extract($_POST);
+				$where.="stid=$sendtoid";
+			}
 			$response=$this->Model_Default->select(6,$where);
-			if($response!=false){
-				$message=array('success'=>true,'response'=>$response);
+			if($response['response']!=false){
+				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
-				$message=array('success'=>false);
+				$message=$response;
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
 	}
 }

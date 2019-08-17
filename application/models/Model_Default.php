@@ -22,7 +22,9 @@ class Model_Default extends CI_Model{
 				5=>'tbl_grievence',
 				6=>'tbl_ministry',
 				7=>'tbl_psu',
-				8=>'tbl_department'
+				8=>'tbl_department',
+				9=>'tbl_send_to',
+				10=>'tbl_division',
 
             );
             if($table[$tblno]){
@@ -30,8 +32,11 @@ class Model_Default extends CI_Model{
             }else{
                 return false;
             }
-        }catch (Exception $e){
-            echo "Message:".$e->getMessage();
+        }catch (Exception $exception){
+		return	$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
         }
     }
     public function select($tblno,$where=null,$orderby=null,$groupby=null,$limit=0,$distinct=null,$offset=0){
@@ -58,16 +63,32 @@ class Model_Default extends CI_Model{
 				}
                 $response=$this->db->get($table);
                 if($response->num_rows()>0){
-                    return $response->result();
+                    //return $response->result();
+					$message=array(
+						'response'=>true,
+						'message'=>$response->result()
+					);
                 }else{
-                    return false;
+					$message=array(
+						'response'=>false,
+						'message'=>'Unable to get any data from server'
+					);
+
                 }
             }else{
-                return false;
+				$message=array(
+					'response'=>false,
+					'message'=>'Unable to find the table from database'
+				);
             }
+            return $message;
         }catch (Exception $e){
-            echo "Message:".$e->getMessage();
+		return	$message=array(
+				'response'=>false,
+				'message'=>$e->getMessage()
+			);
         }
+
     }
     /*public function insert($tblno,$data=array())
     {
@@ -113,7 +134,20 @@ class Model_Default extends CI_Model{
                     }else{
                         $this->db->trans_commit();
                     }
-					return $id;
+					if($id!=false){
+						$message=array(
+							'response'=>true,
+							'message'=>$id
+						);
+					}else{
+						$message=array(
+							'response'=>false,
+							'message'=>'Unable to insert record, transaction rollback'
+						);
+					}
+
+					return $message;
+
 				}else{
 					$this->db->insert_batch($table,$data);
                     $res=$this->db->affected_rows();
@@ -124,17 +158,33 @@ class Model_Default extends CI_Model{
                         $this->db->trans_commit();
                     }
 					if($res>0){
-						return true;
+						$message=array(
+							'response'=>true,
+							'message'=>'Record updated successfully'
+						);
 					}else{
-						return false;
+						//return false;
+						$message=array(
+							'response'=>false,
+							'message'=>'Unable to update record, transaction rollback'
+						);
 					}
 				}
 			}else{
-				return false;
+				//return false;
+				$message=array(
+					'response'=>false,
+					'message'=>'Unable to find table.'
+				);
 			}
+			return $message;
 		}catch (Exception $e)
 		{
-			echo "Message :".$e->getMessage();
+			//echo "Message :".$e->getMessage();
+			return $message=array(
+				'response'=>false,
+				'message'=>$e->getMessage()
+			);
 		}
 	}
 
@@ -152,20 +202,32 @@ class Model_Default extends CI_Model{
                 $this->db->update($table);
                 if($this->db->affected_rows()>0)
                 {
-                    if($where!=null){
-                        return $this->db->affected_rows();
-                    }else{
-                        return true;
-                    }
+                        //return $this->db->affected_rows();
+						$message=array(
+							'response'=>true,
+							'message'=>$this->db->affected_rows()
+						);
                 }else{
-                    return false;
+
+					$message=array(
+						'response'=>false,
+						'message'=>'Unable to update record.'
+					);
                 }
             }else{
-                return false;
+				$message=array(
+					'response'=>false,
+					'message'=>'Unable to found table'
+				);
             }
+            return $message;
         }catch (Exception $e)
         {
-            echo "Message :".$e->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$e->getMessage()
+			);
+			return $message;
         }
     }
     public function query($query,$type=null){
@@ -173,20 +235,39 @@ class Model_Default extends CI_Model{
             if($query!=""){
                 $res=$this->db->query($query);
                 if($type!=null){
-                return	$this->db->affected_rows();
+                //return	$this->db->affected_rows();
+					$message=array(
+						'response'=>true,
+						'message'=>$this->db->affected_rows()
+					);
 				}else{
 					if($res->num_rows()>0){
-						return $res->result();
+						//return $res->result();
+						$message=array(
+							'response'=>true,
+							'message'=>$res->result()
+						);
 					}else{
-						return false;
+						$message=array(
+							'response'=>false,
+							'message'=>'No record found'
+						);
 					}
 				}
 
             }else{
-                return false;
+				$message=array(
+					'response'=>false,
+					'message'=>'Invalid query'
+				);
             }
+            return $message;
         }catch (Exception $e){
-            echo "Message :".$e->getMessage();
+			$message=array(
+				'response'=>true,
+				'message'=>$e->getMessage()
+			);
+			return $message;
         }
     }
 

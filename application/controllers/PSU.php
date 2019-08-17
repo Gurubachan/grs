@@ -32,15 +32,19 @@ class PSU extends CI_Controller
 				);
 
 				$response=$this->Model_Default->insert(7,$data);
-				if($response!=false){
-					$mesage=array('success'=>true,'response'=>$response);
+				if($response['response']!=false){
+					$mesage=array('response'=>true,'message'=>$response['message']);
 				}else{
-					$mesage=array('success'=>false);
+					$mesage=$response;
 				}
 				echo json_encode($mesage);
 			}
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>true,
+				'message'=>$this->db->affected_rows()
+			);
+			echo json_encode($message);
 		}
 	}
 
@@ -53,14 +57,18 @@ class PSU extends CI_Controller
 			}
 
 			$response=$this->Model_Default->select(7,$where);
-			if($response!=false){
-				$message=array('success'=>true,'response'=>$response);
+			if($response['response']!=false){
+				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
-				$message=array('success'=>false);
+				$message=$response;
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
 	}
 }

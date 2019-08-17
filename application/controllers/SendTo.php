@@ -2,15 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Gurubachan
- * Date: 7/6/2019
- * Time: 12:10 PM
+ * Date: 8/17/2019
+ * Time: 11:03 AM
  */
-
 
 defined("BASEPATH") or exit('No direct script access allowed.');
 date_default_timezone_set("Asia/Kolkata");
 header("Access-Control-Allow-Origin: *");
-class Source extends CI_Controller
+class SendTo extends CI_Controller
 {
 	public function __construct()
 	{
@@ -19,13 +18,8 @@ class Source extends CI_Controller
 	}
 
 	public function loadForm(){
-		try{
-			$this->load->view('Source/frmSource');
-		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
-		}
+		$this->load->view('sendto/frmSendto');
 	}
-
 	public function insert(){
 		try{
 			if(isset($_POST)){
@@ -35,33 +29,28 @@ class Source extends CI_Controller
 					'entryby'=>1,
 					'isactive'=>1
 				);
-				$response=$this->Model_Default->insert(4,$data);
-				if($response['message']!=false){
-					$message=array('message'=>true,'message'=>$response['message']);
-				}else{
-					$message=$response;
-				}
-				echo json_encode($message);
-			}
 
+				$response=$this->Model_Default->insert(9,$data);
+				if($response['response']!=false){
+					$mesage=array('response'=>true,'message'=>$response['message']);
+				}else{
+					$mesage=$response;
+				}
+				echo json_encode($mesage);
+			}
 		}catch (Exception $exception){
-			 $message=array(
-				'response'=>false,
+			$message=array(
+				'response'=>true,
 				'message'=>$exception->getMessage()
 			);
-			 echo json_encode($message);
+			echo json_encode($message);
 		}
 	}
 
-	public function select($response_from=null){
+	public function select(){
 		try{
 			$where=null;
-			if($response_from!=null){
-
-			}else{
-				$where='isactive=1';
-			}
-			$response=$this->Model_Default->select(4,$where);
+			$response=$this->Model_Default->select(9,$where);
 			if($response['response']!=false){
 				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
@@ -76,4 +65,5 @@ class Source extends CI_Controller
 			echo json_encode($message);
 		}
 	}
+
 }

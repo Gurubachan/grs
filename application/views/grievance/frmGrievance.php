@@ -4,17 +4,17 @@
             <div class="col-md-6">
               <div class="card">
                 <div class="card-header card-header-primary">
-                  <h4 class="card-title">Create Grievance</h4>
+                  <h4 class="card-title">Create Tickets </h4>
 
                 </div>
                 <div class="card-body">
                   <form name="frmGrievence" id="frmGrievence" method="post" action="<?= base_url('Grievance/insertGrievence')?>" enctype="multipart/form-data">
                     <div class="row">
-                      <div class="col-md-6 offset-3">
+                      <div class="col-md-12 ">
                         <div class="form-group">
-							<select name="cboType" id="cboType" class="form-control" onchange="callGrievanceGeneraetForm(this)">
+							<select name="cboType" id="cboType" class="form-control" data-width="100%"  data-live-search="true" onchange="callGrievanceGeneraetForm(this)">
 								<option value="">Select Grievance</option>
-								<option value="na">Not In List</option>
+								<option value="na">Other</option>
 							</select>
                         </div>
                       </div>
@@ -26,7 +26,7 @@
                           <label class="bmd-label-floating">Sender</label>
 							<select name="cboFrom" id="cboFrom" class="form-control" onchange="callSenderReceiverForm(this,1)">
 								<option value="">Select Sender</option>
-								<option value="na">Not in list</option>
+								<option value="na">Other</option>
 							</select>
                         </div>
                       </div>
@@ -35,27 +35,39 @@
                           <label class="bmd-label-floating">Receiver</label>
 							<select name="cboTo" id="cboTo" class="form-control" onchange="callSenderReceiverForm(this,2)">
 								<option value="">Select Receiver</option>
-								<option value="na">Not in list</option>
+								<option value="na">Other</option>
 							</select>
                         </div>
                       </div>
                     </div>
 					  <div class="row">
-						  <div class="col-md-4">
+						  <div class="col-md-6">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Send To</label>
+								  <select name="cboSendto" id="cboSendto" class="form-control" onchange="callSendto(this)">
+									  <option value="">Select</option>
+									  <option value="na">Other</option>
+								  </select>
+							  </div>
+						  </div>
+						  <div class="col-md-6">
 							  <div class="form-group">
 								  <label class="bmd-label-floating">Ministry</label>
 								  <select name="cboMinistry" id="cboMinistry" class="form-control" onchange="callMinistryForm(this)">
 									  <option value="">Select</option>
-									  <option value="na">Not in list</option>
+									  <option value="na">Other</option>
 								  </select>
 							  </div>
 						  </div>
+
+					  </div>
+					  <div class="row">
 						  <div class="col-md-4">
 							  <div class="form-group">
 								  <label class="bmd-label-floating">PSU</label>
 								  <select name="cbopsu" id="cbopsu" class="form-control" onchange="callPSUForm(this)">
 									  <option value="">Select</option>
-									  <option value="na">Not in list</option>
+									  <option value="na">Other</option>
 								  </select>
 							  </div>
 						  </div>
@@ -64,19 +76,29 @@
 								  <label class="bmd-label-floating">Department</label>
 								  <select name="cboDepartment" id="cboDepartment" class="form-control" onchange="callDepartment(this)">
 									  <option value="">Select</option>
-									  <option value="na">Not in list</option>
+									  <option value="na">Other</option>
+								  </select>
+							  </div>
+						  </div>
+						  <div class="col-md-4">
+							  <div class="form-group">
+								  <label class="bmd-label-floating">Division</label>
+								  <select name="cboDivision" id="cboDivision" class="form-control" onchange="callDivision(this)">
+									  <option value="">Select</option>
+									  <option value="na">Other</option>
 								  </select>
 							  </div>
 						  </div>
 					  </div>
 
 					  <div class="row">
+
 						  <div class="col-md-6">
 							  <div class="form-group">
 								  <label class="bmd-label-floating">Source</label>
 								  <select name="cboSource" id="cboSource" class="form-control" onchange="callSourceForm(this)">
 									  <option value="">Select</option>
-									  <option value="na">Not in list</option>
+									  <option value="na">Other</option>
 								  </select>
 							  </div>
 						  </div>

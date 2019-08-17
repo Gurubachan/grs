@@ -18,12 +18,42 @@
               <p>Dashboard</p>
             </a>
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" onclick="getGrievance()" href="#">
+          <!--<li class="nav-item active">
+            <a class="nav-link" onclick="getGrievance()" >
               <i class="material-icons">person</i>
-              <p>Grievance</p>
+              <p>Log Ticket</p>
             </a>
-          </li>
+          </li>-->
+			<li class="nav-item active">
+				<a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="material-icons">person</i>
+					<p>
+						Log Tickets
+					</p>
+				</a>
+				<div class="dropdown-menu active" style="width: 89%" aria-labelledby="navbarDropdownProfile">
+					<a class="dropdown-item" href="#" onclick="getGrievance()">
+						<i class="material-icons">event</i>
+						General Grievances
+					</a>
+					<a class="dropdown-item" href="#">
+						<i class="material-icons">flight_takeoff</i>
+						Transfer
+					</a>
+					<a class="dropdown-item" href="#">
+						<i class="material-icons">card_giftcard</i>
+						Invitation
+					</a>
+					<a class="dropdown-item" href="#">
+						<i class="material-icons">account_balance</i>
+						PM Relief Fund
+					</a>
+					<a class="dropdown-item" href="#">
+						<i class="material-icons">mail</i>
+						Message
+					</a>
+				</div>
+			</li>
           <!--<li class="nav-item ">
             <a class="nav-link" href="./tables.html">
               <i class="material-icons">content_paste</i>

@@ -40,21 +40,23 @@ class SenderReceiver extends CI_Controller
 					'isactive'=>1
 				);
 				$response=$this->Model_Default->insert(3,$data);
-				if($response!=false){
+				if($response['response']!=false){
 					$message=array(
-						'success'=>true,
-						'response'=>$response
+						'response'=>true,
+						'message'=>$response['message']
 					);
 				}else{
-					$message=array(
-						'success'=>false
-					);
+					$message=$response;
 				}
 
 				echo json_encode($message);
 			}
 		}catch (Exception $exception){
-
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
 	}
 
@@ -74,14 +76,18 @@ class SenderReceiver extends CI_Controller
 			}
 			//echo $where;
 			$response=$this->Model_Default->select(3,$where);
-			if($response!=false){
-				$message=array('success'=>true, 'response'=>$response);
+			if($response['response']!=false){
+				$message=array('response'=>true, 'message'=>$response['message']);
 			}else{
-				$message=array('success'=>false);
+				$message=$response;
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){
-			echo "Message :".$exception->getMessage();
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
 		}
 	}
 

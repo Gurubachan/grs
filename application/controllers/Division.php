@@ -2,14 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: Gurubachan
- * Date: 7/6/2019
- * Time: 11:20 PM
+ * Date: 8/17/2019
+ * Time: 12:51 PM
  */
 
-defined("BASEPATH") or exit('No direct script access allowed.');
-date_default_timezone_set("Asia/Kolkata");
-header("Access-Control-Allow-Origin: *");
-class Department extends CI_Controller
+class Division extends CI_Controller
 {
 	public function __construct()
 	{
@@ -18,7 +15,7 @@ class Department extends CI_Controller
 	}
 
 	public function loadForm(){
-		$this->load->view('department/frmDepartment');
+		$this->load->view('division/frmDivision');
 	}
 
 	public function insert(){
@@ -26,13 +23,13 @@ class Department extends CI_Controller
 			if(isset($_POST)){
 				extract($_POST);
 				$data[]=array(
-					'dname'=>ucwords($txtName),
-					'psuid'=>$cboPsu,
+					'name'=>ucwords($txtName),
+					'department'=>$cboDepartment,
 					'entryby'=>1,
 					'isactive'=>1
 				);
 
-				$response=$this->Model_Default->insert(8,$data);
+				$response=$this->Model_Default->insert(10,$data);
 				if($response['response']!=false){
 					$mesage=array('response'=>true,'message'=>$response['message']);
 				}else{
@@ -52,12 +49,12 @@ class Department extends CI_Controller
 	public function select(){
 		try{
 			$where="";
-			if(isset($_POST['psuid']) && $_POST['psuid']!=""){
+			if(isset($_POST['department']) && $_POST['department']!=""){
 				extract($_POST);
-				$where.="psuid=$psuid";
+				$where.="department=$department";
 			}
 
-			$response=$this->Model_Default->select(8,$where);
+			$response=$this->Model_Default->select(10,$where);
 			if($response['response']!=false){
 				$message=array('response'=>true,'message'=>$response['message']);
 			}else{

@@ -11,9 +11,9 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
-										<label class="bmd-label-floating">PSU</label>
-										<select name="cboPsu" id="cboPsuforDepartment" class="form-control" required>
-											<option value="">Select PSU</option>
+										<label class="bmd-label-floating">PSU / Organisation</label>
+										<select name="cboPsu" id="cboPsuforDepartment" class="form-control" data-live-search="true" required>
+											<option value="">Select PSU / Organisation</option>
 										</select>
 									</div>
 								</div>
