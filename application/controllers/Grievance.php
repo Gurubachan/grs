@@ -43,16 +43,19 @@ class Grievance extends CI_Controller
 					'ministry'=>$cboMinistry,
 					'psu'=>$cbopsu,
 					'department'=>$cboDepartment,
+					'stid'=>$cboSendto,
 					'subject'=>ucwords($txtSubject),
 					'referanceno'=>ucwords($txtReferance),
 					'source'=>$cboSource,
 					'body'=>ucwords($txtMessage),
 					'entryby'=>1,
-					'isactive'=>1
+					'isactive'=>1,
+					'message_type'=>$cboMessageType,
+					'seviourity'=>$cboSeviourity
 				);
 				$response=$this->Model_Default->insert(5,$data);
-				if($response['success']!=false){
-					$message=array('success'=>true,'response'=>$response['message']);
+				if($response['response']!=false){
+					$message=array('resonse'=>true,'message'=>$response['message']);
 				}else{
 					$message=$response;
 				}
@@ -69,9 +72,51 @@ class Grievance extends CI_Controller
 
 	public function loadGrievences(){
 		try{
-			$response=$this->Model_Default->select(5);
-			if($response!=false){
-				$message=array('success'=>true,'response'=>$response['message']);
+			$where=null;
+			$orderby=null;
+			$groupby=null;
+			$limit=0;
+			if(isset($_POST)){
+				extract($_POST);
+				if(isset($date) && $date=="today"){
+					$where.="isactive =1 and status=1 and date(createdate)='".date('Y-m-d')."'";
+					$orderby="id desc";
+					$limit=5;
+				}
+			}
+			$response=$this->Model_Default->select(5, $where, $orderby, $groupby,$limit);
+
+			if($response['response']!=false){
+				$data=$response['message'];
+				$response_sender_receiver=$this->Model_Default->select(3,'isactive=1');
+				$sender=array();
+				if($response_sender_receiver['response']!=false){
+					$data_sender_receiver=$response_sender_receiver['message'];
+
+					foreach ($data_sender_receiver as $sr){
+						$sender[$sr->id]=$sr->name;
+					}
+				}
+
+				$record=array();
+				if(count($sender)>0){
+					foreach ($data as $d){
+						$record[]=array(
+							'id'=>$d->id,
+							'name'=>$sender[$d->senderid],
+							'receiver'=>$sender[$d->receiverid],
+							'subject'=>$d->subject,
+							'referanceno'=>$d->referanceno,
+							'subject'=>$d->subject,
+							'body'=>$d->body,
+							'status'=>'Received'
+							);
+					}
+					$message=array('response'=>true,'message'=>$record);
+				}else{
+					$message=array('response'=>false,'message'=>"invalid sender and receiver");
+				}
+
 			}else{
 				$message=$response;
 			}
@@ -149,7 +194,71 @@ class Grievance extends CI_Controller
 			echo json_encode($message);
 		}
 	}
+	public function frmGrievanceSubType(){
+		try{
+			$this->load->view('grievance/frmGrievanceSubType');
+		}catch (Exception $exception){
+			echo "Message:" .$exception->getMessage();
+		}
 
+	}
+
+	public function insertGrievenceSubType(){
+		try{
+			extract($_POST);
+			if(isset($txtGrievanceSubType) && isset($cboType)){
+				$data[]=array(
+					'tid'=>$cboType,
+					'stname'=>ucwords($txtGrievanceSubType),
+					'entryby'=>1,
+					'isactive'=>1
+				);
+				$response=$this->Model_Default->insert(14,$data);
+				if($response['response']!=false){
+					$message=array('response'=>true,'message'=>$response['message']);
+				}else{
+					$message=$response;
+				}
+
+			}else{
+				$message=array(
+					'response'=>false,
+					'message'=>'Invalid request send.'
+				);
+			}
+			echo json_encode($message);
+		}catch (Exception $exception){
+			$message=array(
+				'response'=>true,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
+		}
+	}
+
+	public function loadGrievenceSubType($response_from=null){
+		try{
+			$where=null;
+			if($response_from!=null){
+
+			}else{
+				$where='isactive=1';
+			}
+			$response=$this->Model_Default->select(14,$where);
+			if($response['response']!=false){
+				$message=array('response'=>true,'message'=>$response['message']);
+			}else{
+				$message=$response;
+			}
+			echo json_encode($message);
+		}catch (Exception $exception){
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
+		}
+	}
 	public function test(){
 		//echo "hi";
 		echo json_encode($_POST);

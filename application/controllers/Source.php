@@ -36,8 +36,8 @@ class Source extends CI_Controller
 					'isactive'=>1
 				);
 				$response=$this->Model_Default->insert(4,$data);
-				if($response['message']!=false){
-					$message=array('message'=>true,'message'=>$response['message']);
+				if($response['response']!=false){
+					$message=array('response'=>true,'message'=>$response['message']);
 				}else{
 					$message=$response;
 				}

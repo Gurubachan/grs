@@ -1,26 +1,26 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: Gurubachan
- * Date: 8/15/2019
- * Time: 10:12 AM
+ * User: Gurubachan-Asus
+ * Date: 9/19/2019
+ * Time: 10:01 PM
  */
 
-class Severity extends CI_Controller
+class Referances extends CI_Controller
 {
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('Model_Default');
 	}
-
 	public function loadForm(){
 		try{
-			$this->load->view("Severity/frmSeverity");
+			$this->load->view("Referances/frmReferances");
 		}catch (Exception $exception){
 			echo "Message :".$exception->getMessage();
 		}
 	}
+
 	public function select($response_from=null)
 	{
 		try{
@@ -30,7 +30,7 @@ class Severity extends CI_Controller
 			}else{
 				$where='isactive=1';
 			}
-			$response=$this->Model_Default->select(12,$where);
+			$response=$this->Model_Default->select(13,$where);
 			if($response['response']!=false){
 				$message=array('response'=>true,'message'=>$response['message']);
 			}else{
@@ -49,13 +49,13 @@ class Severity extends CI_Controller
 	public function insert(){
 		try{
 			extract($_POST);
-			if(isset($txtSeverityType)){
+			if(isset($txtReferancename)){
 				$data[]=array(
-					'name'=>ucwords($txtSeverityType),
+					'referancename'=>ucwords($txtReferancename),
 					'entryby'=>1,
 					'isactive'=>1
 				);
-				$response=$this->Model_Default->insert(12,$data);
+				$response=$this->Model_Default->insert(13,$data);
 				if($response['response']!=false){
 					$message=array('response'=>true,'message'=>$response['message']);
 				}else{

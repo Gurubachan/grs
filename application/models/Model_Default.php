@@ -25,7 +25,10 @@ class Model_Default extends CI_Model{
 				8=>'tbl_department',
 				9=>'tbl_send_to',
 				10=>'tbl_division',
-
+				11=>'tbl_message_type',
+				12=>'tbl_seviority',
+				13=>'tbl_referances',
+				14=>'tbl_grievence_subtype'
             );
             if($table[$tblno]){
                 return $table[$tblno];
@@ -122,7 +125,7 @@ class Model_Default extends CI_Model{
 			$table=$this->find_table($tblno);
 			if($table!=false){
 				if(count($data)==1){
-					$this->db->insert($table,$data[0]);
+					$response=$this->db->insert($table,$data[0]);
                     if($this->db->affected_rows()>0){
                        $id=$this->db->insert_id();
                     }else{

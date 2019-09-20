@@ -28,30 +28,34 @@
 				<a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<i class="material-icons">person</i>
 					<p>
-						Log Tickets
+						Register Grievance
 					</p>
 				</a>
 				<div class="dropdown-menu active" style="width: 89%" aria-labelledby="navbarDropdownProfile">
 					<a class="dropdown-item" href="#" onclick="getGrievance()">
-						<i class="material-icons">event</i>
-						General Grievances
+						<i class="material-icons">mail</i>
+						Grievances
 					</a>
-					<a class="dropdown-item" href="#">
+					<a class="dropdown-item" href="#" onclick="getGrievance('Transfer')">
+						<i class="material-icons">card_giftcard</i>
+						Request
+					</a>
+					<!--<a class="dropdown-item" href="#" onclick="getGrievance('Transfer')">
 						<i class="material-icons">flight_takeoff</i>
 						Transfer
 					</a>
-					<a class="dropdown-item" href="#">
+					<a class="dropdown-item" href="#" onclick="getGrievance('Invitation')">
 						<i class="material-icons">card_giftcard</i>
 						Invitation
 					</a>
 					<a class="dropdown-item" href="#">
 						<i class="material-icons">account_balance</i>
-						PM Relief Fund
+						Financial Assistance
 					</a>
-					<a class="dropdown-item" href="#">
+					<a class="dropdown-item" href="#" onclick="getGrievance('Message')">
 						<i class="material-icons">mail</i>
 						Message
-					</a>
+					</a>-->
 				</div>
 			</li>
           <!--<li class="nav-item ">
