@@ -38,20 +38,24 @@ class Grievance extends CI_Controller
 				extract($_POST);
 				$data[]=array(
 					'gtype'=>$cboType,
-					'senderid'=>$cboFrom,
-					'receiverid'=>$cboTo,
-					'ministry'=>$cboMinistry,
-					'psu'=>$cbopsu,
-					'department'=>$cboDepartment,
-					'stid'=>$cboSendto,
 					'subject'=>ucwords($txtSubject),
-					'referanceno'=>ucwords($txtReferance),
+					'referanceno'=>$cboReferances,
 					'source'=>$cboSource,
 					'body'=>ucwords($txtMessage),
 					'entryby'=>1,
 					'isactive'=>1,
+					'senderid'=>$cboFrom,
+					'receiverid'=>$cboTo,
+					'pccode'=>$cboPc,
+					'accode'=>$cboAc,
+					'distcode'=>$cboDist,
+					'blockcode'=>$cboBlock
+					/*'department'=>$cboDepartment,
+					'stid'=>$cboSendto,
+					'psu'=>$cbopsu,
+					'ministry'=>$cboMinistry,
 					'message_type'=>$cboMessageType,
-					'seviourity'=>$cboSeviourity
+					'seviourity'=>$cboSeviourity*/
 				);
 				$response=$this->Model_Default->insert(5,$data);
 				if($response['response']!=false){
