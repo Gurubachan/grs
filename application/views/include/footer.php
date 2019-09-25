@@ -42,6 +42,7 @@
 
   <script src="<?= base_url('assets/js/plugins/perfect-scrollbar.jquery.min.js')?>"></script>
   <!-- Plugin for the momentJs  -->
+	<script src="<?= base_url('assets/jquery-ui/jquery-ui.js')?>"></script>
 
 
   <!-- Forms Validations Plugin -->
@@ -55,7 +56,7 @@
   <script src="<?= base_url('assets/js/plugins/jquery.dataTables.min.js')?>"></script>
 
   <!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
-  <script src="<?= base_url('assets/js/plugins/fullcalendar.min.js')?>"></script>
+  <!--<script src="<?/*= base_url('assets/js/plugins/fullcalendar.min.js')*/?>"></script>-->
 
 
 
@@ -70,6 +71,7 @@
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <!--<script src="<?/*= base_url('assets/demo/demo.js')*/?>"></script>-->
   <script src="<?= base_url('assets/js/app.js')?>"></script>
+
   <script>
     $(document).ready(function() {
       $().ready(function() {

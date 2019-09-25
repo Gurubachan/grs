@@ -1,101 +1,23 @@
 var grievancetype="";
-var grievanceformtype="";
 var appendcontrol="";
 var psuid=null;
 var sendto=null;
 var ministryid=null;
 var departmentid=null;
 var url="";
-updateid="";
-/*Area mapping script goes here*/
 
-var pc="";
-var ac="";
-var dcode="";
-
-function load_pc(divid) {
-	$.ajax({
-		url:"./ServerPostResponse/load_pc",
-		type:"GET",
-		data:null,
-		success:function (response) {
-			var res=JSON.parse(response);
-			if(res.response==true){
-				var data=res.message;
-				$("#"+divid).html(data);
-			}
-		}
-	})
-}
-
-function load_ac(divid) {
-	$.ajax({
-		url:"./ServerPostResponse/load_ac",
-		type:"POST",
-		data:{pccode:pc},
-		success:function (response) {
-			var res=JSON.parse(response);
-			if(res.response==true){
-				var data=res.message;
-				$("#"+divid).html(data);
-			}
-		}
-	})
-}
-
-function load_district(divid){
-	$.ajax({
-		url:"./ServerPostResponse/get_distcode_on_ac",
-		type:"POST",
-		data:{accode:ac},
-		success:function (response) {
-			var res=JSON.parse(response);
-			var html="";
-			if(res.response!=false){
-				var data=res.message;
-				//console.log(response);
-				for (var i=0; i<data.length;i++){
-					if(dcode!=data[i]['dcode']) {
-						html += "<option value=" + data[i]['dcode']+ ">" + data[i]['dname'] + "</option>";
-					}
-					dcode=data[i]['dcode'];
-				}
-				$("#"+divid).html(html).prop("disabled",true);
-				//$("#"+divid).html(html);
-				load_municipality("cboBlock");
-			}else{
-				console.log(response);
-			}
-
-		}
-	});
-}
-
-function load_municipality(divid) {
-	$.ajax({
-		url:"./ServerPostResponse/load_block",
-		type:"POST",
-		data:{distid:dcode},
-		success:function (response) {
-			var res=JSON.parse(response);
-			if(res.response==true){
-				var data=res.message;
-				$("#"+divid).html(data);
-			}
-		}
-	});
-}
-/*End area mapping script*/
 $("document").ready(function () {
 	loadGrievences('allGrievence');
 	getTodayGrievences('tbl_status_count');
 });
 
-function getGrievance(t) {
+function getGrievance(t=null) {
+
 	if(t!=null){
-		grievanceformtype=t;
+		grievancetype=t;
+
 	}else {
-		alert("Invalid Form Type Request");
+		grievancetype="";
 	}
 	$.ajax({
 		type: "GET",
@@ -110,20 +32,17 @@ function getGrievance(t) {
 			loadSenderReceiver('cboFrom',null,1);
 			loadSenderReceiver('cboTo',null,2);
 			loadSource('cboSource');
-			loadReferances('cboReferances');
-			load_pc('cboPc');
-			if(grievanceformtype==1 ){
+			if(grievancetype=="" ){
 				loadSendto('cboSendto');
 				$("#divMessageType").remove();
-				$("#heading").html("Genereate Grievence");
 			}else {
 				$("#divGrivance").remove();
 				loadMessageType('cboMessageType');
 				loadSeveourity('cboSeviourity');
-				$("#heading").html("Genereate Request");
-
-				$("#txtdateline").datepicker();
 			}
+
+
+			//loadMinistry('cboMinistry');
 			loadGrievences('allGrievence');
 			$("#loadContaint").show();
 
@@ -147,32 +66,16 @@ function getGrievanceReport() {
 function submitToServer(formid,e) {
 	e.preventDefault();
 	var frm=$("#"+formid);
-	var data="";
-	if(formid=="frmGrievence"){
-		$('#cboDist').removeAttr("disabled", false);
-
-	}/*else {
-		data=frm.serialize();
-	}*/
-	data=new FormData(frm[0]);
-	if(updateid!=null){
-		data.append('txtId',updateid);
-	}
+	//alert(frm.attr('action'));
 	$.ajax({
 		type: frm.attr('method'),
 		url: frm.attr('action'),
-		enctype: 'multipart/form-data',
-		data: data,
-		processData: false,
-		contentType: false,
-		cache: false,
-		timeout: 600000,
-		// data: frm.serialize(),
-		// data: frm.serialize(),
+		data: frm.serialize(),
 		success: function (d) {
 			var responsedata=JSON.parse(d);
 			if(responsedata.response == true){
 				var successresponse=responsedata.message;
+				//alert(frmid);
 				if(formid=="frmGrievence"){
 					appendcontrol="allGrievence";
 				}
@@ -181,12 +84,6 @@ function submitToServer(formid,e) {
 				$("#myModal").modal('hide');
 				$("#containtLoadHere").html('');
 			}
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			alert(XMLHttpRequest.statusText);
-			$(frm).trigger('reset');
-			$("#myModal").modal('hide');
-			$("#containtLoadHere").html('');
 		}
 	});
 }
@@ -195,9 +92,6 @@ function loadDataAsPerRequest(divid,responsedata) {
 	switch (divid) {
 		case "cboType":
 			loadGrievenceType(divid,responsedata);
-			break;
-		case "cboSubCategory":
-			loadGrievenceSubType(divid,responsedata);
 			break;
 		case "cboFrom":
 			loadSenderReceiver(divid,responsedata,1);
@@ -232,51 +126,32 @@ function loadDataAsPerRequest(divid,responsedata) {
 		case "cboSeviourity" :
 			loadSeveourity(divid, responsedata);
 			break;
-		case "cboReferances":
-			loadReferances(divid,responsedata);
-			break;
 	}
 	//return day;
 }
 function loadGrievenceType(dataloadingid=null,responsevalue=null) {
-	//alert(grievanceformtype);
-	$.ajax({
-		type: "POST",
-		url: "./Grievance/loadGrievenceType",
-		data: {linkid: grievanceformtype},
-		success: function (d) {
-			var responsedate=JSON.parse(d);
-			if(responsedate.response == true){
-				var html="<option value=\"\">Select Category</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
-				var data=responsedate.message;
-				for (var i=0; i<data.length;i++){
-					html+="<option value="+data[i].id+">"+data[i].tname+"</option>";
-				}
-				//console.log(html);
-				$("#"+dataloadingid).html(html);
-				if(responsevalue!=null){
-					//alert(dataloadingid);
-					$("#"+dataloadingid).val(responsevalue);
-				}
-			}
-		}
-	});
-}
-function loadGrievenceSubType(dataloadingid=null,responsevalue=null) {
 	$.ajax({
 		type: "GET",
-		url: "./Grievance/loadGrievenceSubType",
+		url: "./Grievance/loadGrievenceType",
 		data: null,
 		success: function (d) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
-				var html="<option value=\"\">Select Sub Category</option>\n" +
+				var html="<option value=\"\">Select Grievance</option>\n" +
 					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
-						html+="<option value="+data[i].id+" selected >"+data[i].stname+"</option>";
-						$("#"+dataloadingid).addClass('disabled');
+					if(grievancetype!=null && data[i].tname == grievancetype ){
+							html="<option value="+data[i].id+" selected >"+data[i].tname+"</option>";
+							$("#"+dataloadingid).addClass('disabled');
+						break;
+					}else {
+						if(data[i].tname!="Invitation" && data[i].tname!="Message" && data[i].tname!="Transfer"){
+							html+="<option value="+data[i].id+">"+data[i].tname+"</option>";
+						}
+
+					}
+
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
@@ -310,6 +185,8 @@ function loadSenderReceiver(dataloadingid=null,responsevalue=null,sendertype=nul
 		}
 	});
 }
+
+
 
 function loadSource(dataloadingid=null,responsevalue=null) {
 	$.ajax({
@@ -346,7 +223,7 @@ function getTodayGrievences(dataloadingid=null) {
 				var html = "";
 				var data = responsedate.message;
 				var j=1;
-				//console.log(data);
+				console.log(data);
 				for (var i = 0; i < data.length; i++) {
 					html+="<tr>\n" +
 						"\t\t\t\t\t<td>"+ j +"</td>\n" +
@@ -365,10 +242,9 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 	$.ajax({
 		type: "GET",
 		url: "./Grievance/loadGrievences",
-		data: {linkid:grievanceformtype},
+		data: null,
 		success: function (d) {
 			var responsedate=JSON.parse(d);
-			//console.log(responsedate);
 			if(responsedate.response==true){
 				var html="";
 				var data=responsedate.message;
@@ -380,15 +256,15 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 						"\t\t\t\t\t\t\t\t\t\t<label class=\"form-check-label\">\n" +
 						"\t\t\t\t\t\t\t\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
 						"\t\t\t\t\t\t\t\t\t\t\t<span class=\"form-check-sign\">\n" +
-						"<span class=\"check\"></span>\n" +
-						"</span>\n" +
+						"                                    <span class=\"check\"></span>\n" +
+						"                                  </span>\n" +
 						"\t\t\t\t\t\t\t\t\t\t</label>\n" +
 						"\t\t\t\t\t\t\t\t\t</div>\n" +
 						"\t\t\t\t\t\t\t\t</td>\n" +
-						"\t\t\t\t\t\t\t\t<td>Refer By :"+data[i].referby +'<br> Subject :'+ data[i].subject+'<br> Body :'+ data[i].body +"</td>\n" +
+						"\t\t\t\t\t\t\t\t<td>Referance :"+data[i].referanceno +'<br> Subject :'+ data[i].subject+'<br> Body :'+ data[i].body +"</td>\n" +
 						"\t\t\t\t\t\t\t\t<td class=\"td-actions text-right\">\n" +
-						"\t\t\t\t\t\t\t\t\t<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
-						"\t\t\t\t\t\t\t\t\t\t<i class=\"material-icons\">streetview</i>\n" +
+						"\t\t\t\t\t\t\t\t\t<button type=\"button\" rel=\"tooltip\" title=\"Edit Task\" class=\"btn btn-primary btn-link btn-sm\">\n" +
+						"\t\t\t\t\t\t\t\t\t\t<i class=\"material-icons\">edit</i>\n" +
 						"\t\t\t\t\t\t\t\t\t</button>\n" +
 						"\t\t\t\t\t\t\t\t\t<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
 						"\t\t\t\t\t\t\t\t\t\t<i class=\"material-icons\">close</i>\n" +
@@ -405,87 +281,6 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 			}
 		}
 	});
-}
-function load_single_grivence(grivenceid) {
-	$("#myModal").modal().show();
-	updateid=grivenceid;
-	$.ajax({
-	   type: "POST",
-	   url: "./Grievance/loadGrievences",
-	   data: {gid:grivenceid},
-	   success: function (d) {
-	   		var data=JSON.parse(d);
-	   		if(data['response']!=false){
-	   			var records=data['message'];
-				var html="<div class=\"row\">\n" +
-					"<div class=\"col-md-12\">\n" +
-					"<div class=\"card\">\n" +
-					"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
-					"<h4 class=\"card-title\" id=\"heading\">View Tickets </h4>\n" +
-					"</div>\n" +
-					"<div class=\"card-body\" id='view_ticket_body'>";
-	   			 html+="<table class=\"table\">\n" +
-					"<tr>\n" +
-					"<td>From :</td>\n" +
-					"<td>"+ records[0].name +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Receive Date :</td>\n" +
-					"<td>"+ records[0].recivedate +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Subject :</td>\n" +
-					"<td>"+ records[0].subject +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Body :</td>\n" +
-					"<td>"+ records[0].body +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Attachment</td>\n" +
-					"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].file +" >View</a> </td>\n" +
-					"</tr>\n" +
-					"</table>";
-	   			 html+= "<fieldset>" +
-					 "<legend>Process To</legend>" +
-					 "<div class='row'>" +
-					 "<div class='col-lg-6 col-md-6 col-sm-6'>" +
-					 "<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Organisation</button>" +
-					 "</div> " +
-					 "<div class='col-lg-6 col-md-6 col-sm-6'>" +
-					 "<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Individual</button>" +
-					 "</div> " +
-					 "</div>"+
-					 "</fieldset>" ;
-
-	   			 html+="</div>\n" +
-					 "</div>";
-				html+="<div id='processto'></div>";
-				html+="<div class='card-footer'>" +
-					 "<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Process</button> " +
-					 "</div>" +
-					 "</div>\n" +
-					 "</div>";
-				$("#containtLoadHere").html(html);
-			}
-	   }
-	})
-}
-function view_tickets_header() {
-	$("#view_ticket_body").toggle();
-}
-function call_grivance_forward_form() {
-	$.ajax({
-		type: "GET",
-		url: "./Grievance/frmGrievanceForward",
-		data: null,
-		success: function (d) {
-			$("#processto").html(d);
-			$("#view_ticket_body").toggle();
-			loadSendto("cboSendto");
-		}
-
-});
 }
 
 function loadSendto(dataloadingid=null, responsevalue=null){
@@ -669,30 +464,6 @@ function loadSeveourity(dataloadingid=null, responsevalue=null){
 		}
 	});
 }
-function loadReferances(dataloadingid=null, responsevalue=null){
-	$.ajax({
-		type: "POST",
-		url: "./Referances/select",
-		data: null,
-		success: function (d) {
-			var responsedate=JSON.parse(d);
-			if(responsedate.response == true){
-				var html="<option value=\"\">Select Referances</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not in list</option>";
-				var data=responsedate.message;
-				for (var i=0; i<data.length;i++){
-					html+="<option value="+data[i].id+">"+data[i].referancename+"</option>";
-				}
-				//console.log(html);
-				$("#"+dataloadingid).html(html);
-				if(responsevalue!=null){
-					//alert(dataloadingid);
-					$("#"+dataloadingid).val(responsevalue);
-				}
-			}
-		}
-	});
-}
 function callGrievanceGeneraetForm(t) {
 	if(t.value==='na'){
 		$("#myModal").modal().show();
@@ -705,29 +476,6 @@ function callGrievanceGeneraetForm(t) {
 				$("#containtLoadHere").html(d);
 				appendcontrol=t.id;
 				$(".x").removeClass('col-md-6').addClass('col-md-12');
-				$("#cboCategory").val(grievanceformtype);
-			}
-		});
-	}else {
-		grievancetype=t.value;
-		if(t.value!=""){
-			loadGrievenceSubType('cboSubCategory');
-		}
-	}
-}
-function callSubGrievanceGeneraetForm(t) {
-	if(t.value==='na'){
-		$("#myModal").modal().show();
-		$.ajax({
-			type: "GET",
-			url: "./Grievance/frmGrievanceSubType",
-			data: null,
-			success: function (d) {
-				//console.log(d);
-				$("#containtLoadHere").html(d);
-				appendcontrol=t.id;
-				$(".x").removeClass('col-md-6').addClass('col-md-12');
-				loadGrievenceType('cboCategoryforsubcategory',grievancetype);
 			}
 		});
 	}
@@ -742,9 +490,10 @@ function callSourceForm(t) {
 			success: function (d) {
 				//console.log(d);
 				$("#containtLoadHere").html(d);
-				appendcontrol=t.id;
 				$(".x").removeClass('col-md-6').addClass('col-md-12');
+				appendcontrol=t.id;
 				//$("#cboSenderReceiver").attr('disabled',true);
+
 			}
 		});
 	}
@@ -906,24 +655,6 @@ function callSeviourity(t) {
 		$.ajax({
 			type: "GET",
 			url: "./Severity/loadForm",
-			data: null,
-			success: function (d) {
-				//console.log(d);
-				$("#containtLoadHere").html(d);
-				$(".x").removeClass('col-md-6').addClass('col-md-12');
-				appendcontrol = t.id;
-				//$("#cboSenderReceiver").attr('disabled',true);
-			}
-		});
-	}
-}
-
-function callReferances(t) {
-	if (t.value == "na"){
-		$("#myModal").modal().show();
-		$.ajax({
-			type: "GET",
-			url: "./Referances/loadForm",
 			data: null,
 			success: function (d) {
 				//console.log(d);

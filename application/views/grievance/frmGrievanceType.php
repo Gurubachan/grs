@@ -11,6 +11,15 @@
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
+										<label class="bmd-label-floating">Complaign Category</label>
+										<select class="form-control" name="cboCategory" id="cboCategory">
+											<option value="1">Grievences</option>
+											<option value="2">Request</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
 										<label class="bmd-label-floating">Type Of Grievance</label>
 										<input type="text" class="form-control" name="txtGrievanceType" id="txtGrievanceType" required>
 									</div>

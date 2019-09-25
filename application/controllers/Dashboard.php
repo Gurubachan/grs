@@ -5,6 +5,11 @@ date_default_timezone_set("Asia/Kolkata");
 header("Access-Control-Allow-Origin: *");
 
 class Dashboard extends CI_Controller {
+	public function __construct()
+	{
+		parent::__construct();
+		isLogin('authdata');
+	}
 
 	public function header(Type $var = null)
 	{
@@ -18,7 +23,7 @@ class Dashboard extends CI_Controller {
 
 	public function navbar(Type $var = null)
 	{
-		$this->load->view('include/navbar');
+		$this->load->view('include/navbar',$_SESSION['authdata']);
 	}
 	public function index()
 	{

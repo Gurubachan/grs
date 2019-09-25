@@ -6,7 +6,13 @@
  * Time: 10:25 AM
  */
 ?>
-
+<form method="post" action="<?= base_url('Grievance/insertGrievence')?>"
+id="frmGrievanceProcess" name="frmGrievanceProcess" >
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h4 class="card-title" id="heading">Process Tickets </h4>
+	</div>
+	<div class="card-body">
 <div class="row" id="divGrivance">
 	<div class="col-md-6">
 		<div class="form-group">
@@ -53,4 +59,15 @@
 			</select>
 		</div>
 	</div>
+	<div class="col-md-12">
+		<label class="bmd-label-floating">Remarks</label>
+		<textarea class="form-control" id="txtRemark" name="txtRemark" cols="4" required></textarea>
+	</div>
+	<fieldset>
+		<legend>File Attachment</legend>
+		<input type="file" name="attachment" id="attachment" class="form-control" accept=".pdf,.docx,.doc,.jpg">
+	</fieldset>
+		</div>
+	</div>
 </div>
+</form>

@@ -35,19 +35,32 @@
 				</div>-->
 			</div>
 			<div class="card-body">
-				<form>
+				<form method="post"
+					  name="frmUserAuthentication"
+					  id="frmUserAuthentication"
+					  action="./Auth/check_userid"
+				>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-user"></i></span>
 						</div>
-						<input type="text" class="form-control" placeholder="username">
+						<input type="text"
+							   name="txtUserName"
+							   id="txtUserName"
+							   required
+							   class="form-control" placeholder="username"
+						>
 
 					</div>
 					<div class="input-group form-group">
 						<div class="input-group-prepend">
 							<span class="input-group-text"><i class="fas fa-key"></i></span>
 						</div>
-						<input type="password" class="form-control" placeholder="password">
+						<input type="password"
+							   name="txtPassword"
+							   id="txtPassword"
+							   required
+							   class="form-control" placeholder="password">
 					</div>
 					<div class="row align-items-center remember">
 						<input type="checkbox">Remember Me
@@ -71,7 +84,20 @@
 <script>
 	$("#btnSubmit").click(function (e) {
 		e.preventDefault();
-		window.location.href="./Dashboard";
+		var frm=$("#frmUserAuthentication");
+		$.ajax({
+			type: frm.attr('method'),
+			url: frm.attr('action'),
+			data: frm.serialize(),
+			success: function (data) {
+				var responsedata = JSON.parse(data);
+				if (responsedata.response == true) {
+					window.location.href='./'+ responsedata.message;
+				} else {
+					alert(responsedata.message);
+				}
+			}
+		});
 	});
 </script>
 </body>

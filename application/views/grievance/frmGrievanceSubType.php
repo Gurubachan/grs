@@ -13,7 +13,7 @@
 									<div class="col-md-12">
 										<div class="form-group">
 											<label class="bmd-label-floating">Category</label>
-											<select name="cboType" id="cboCategoryforsubcategory" class="form-control" required>
+											<select name="cboSubType" id="cboCategoryforsubcategory" class="form-control" required>
 												<option value="">Select Category</option>
 											</select>
 										</div>

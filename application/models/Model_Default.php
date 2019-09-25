@@ -28,7 +28,10 @@ class Model_Default extends CI_Model{
 				11=>'tbl_message_type',
 				12=>'tbl_seviority',
 				13=>'tbl_referances',
-				14=>'tbl_grievence_subtype'
+				14=>'tbl_grievence_subtype',
+				15=>'tbl_user_type',
+				16=>'tbl_user',
+				17=>'tbl_auth'
             );
             if($table[$tblno]){
                 return $table[$tblno];

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,5 +16,6 @@
   <link href="<?= base_url('assets/css/material-dashboard.css')?>" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="<?= base_url('assets/demo/demo.css')?>" rel="stylesheet" />
+  <link href="<?= base_url('assets/jquery-ui/jquery-ui.css')?>" rel="stylesheet" />
 </head>
 <body class="">

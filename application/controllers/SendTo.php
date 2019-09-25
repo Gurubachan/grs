@@ -15,6 +15,7 @@ class SendTo extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('Model_Default');
+		isLogin('authdata');
 	}
 
 	public function loadForm(){

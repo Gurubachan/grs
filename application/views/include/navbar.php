@@ -1,14 +1,21 @@
+
 <div class="wrapper ">
     <div class="sidebar" data-color="purple" data-background-color="white" data-image="<?= base_url('assets/img/sidebar-1.jpg')?>">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
         Tip 2: you can also add an image using data-image tag
+
+        Get Grivance
+        1 for Grivance form
+        2 for Request form
     -->
+
       <div class="logo">
         <a href="http://thinksimple.co.in" class="simple-text logo-normal">
          GRS
         </a>
+
       </div>
       <div class="sidebar-wrapper">
         <ul class="nav">
@@ -32,11 +39,11 @@
 					</p>
 				</a>
 				<div class="dropdown-menu active" style="width: 89%" aria-labelledby="navbarDropdownProfile">
-					<a class="dropdown-item" href="#" onclick="getGrievance()">
+					<a class="dropdown-item" href="#" onclick="getGrievance(1)">
 						<i class="material-icons">mail</i>
 						Grievances
 					</a>
-					<a class="dropdown-item" href="#" onclick="getGrievance('Transfer')">
+					<a class="dropdown-item" href="#" onclick="getGrievance(2)">
 						<i class="material-icons">card_giftcard</i>
 						Request
 					</a>
@@ -159,10 +166,11 @@
                   </p>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProfile">
+					<a class="dropdown-item" id="username"><?= $username ?></a>
                   <a class="dropdown-item" href="#">Profile</a>
                   <a class="dropdown-item" href="#">Settings</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Log out</a>
+                  <a class="dropdown-item" href="<?= base_url('Auth/logout')?>">Log out</a>
                 </div>
               </li>
             </ul>
