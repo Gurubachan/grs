@@ -113,7 +113,7 @@ class Grievance extends CI_Controller
 					$data[0]['individualid'] = $cboIndividual;
 				}
 				if ($this->session->authdata['userid']) {
-					if(isset($txtId)){
+					if(isset($txtId) && $txtId!=null){
 						$data[0]['updatedby'] = $this->session->authdata['userid'];
 					}else{
 						$data[0]['entryby'] = $this->session->authdata['userid'];
@@ -126,6 +126,7 @@ class Grievance extends CI_Controller
 					);
 				}
 				$data[0]['isactive']=1;
+				$data[0]['receivedate']=date("Y-m-d",strtotime($txtReceiveDate));
 				$new_name="";
 				$config['file_name'] = time().$_FILES["attachment"]['name'];;
 				$config['upload_path']   = 'uploads/';
@@ -139,7 +140,7 @@ class Grievance extends CI_Controller
 					//print_r($uploadData);
 
 					 $uploadedFile = $uploadData['file_name'];
-					if(isset($txtId)){
+					if(isset($txtId) && $txtId!=null){
 						$data[0]['processfilelink']=base_url("uploads/$uploadedFile");
 					}else{
 						$data[0]['filelink']=base_url("uploads/$uploadedFile");
@@ -149,7 +150,7 @@ class Grievance extends CI_Controller
 				}else{
 					$message['error_msg'] = $this->upload->display_errors();
 				}
-				if(isset($txtId)){
+				if(isset($txtId) && $txtId!=null){
 					$response=$this->Model_Default->update(5,$data,'id',$txtId);
 				}else{
 					$response=$this->Model_Default->insert(5,$data);
@@ -184,7 +185,7 @@ class Grievance extends CI_Controller
 					$orderby="id desc";
 					$limit=5;
 				}
-				if(isset($gid) && $gid!=null && is_int($gid)){
+				if(isset($gid) && $gid!=null){
 					$where.=" isactive = 1 and id=$gid ";
 				}
 			}

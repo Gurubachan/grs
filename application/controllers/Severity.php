@@ -17,7 +17,7 @@ class Severity extends CI_Controller
 
 	public function loadForm(){
 		try{
-			$this->load->view("Severity/frmSeverity");
+			$this->load->view("severity/frmSeverity");
 		}catch (Exception $exception){
 			echo "Message :".$exception->getMessage();
 		}

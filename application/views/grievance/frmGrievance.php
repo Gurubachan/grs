@@ -176,7 +176,19 @@
 					  </fieldset>
 					  <fieldset>
 						  <legend>File Attachment</legend>
-						  <input type="file" name="attachment" id="attachment" class="form-control" accept=".pdf,.docx,.doc,.jpg">
+						  <div class="row">
+							  <div class="col-md-6">
+								  <input type="file" name="attachment" id="attachment" class="form-control" accept=".pdf,.docx,.doc,.jpg">
+							  </div>
+							  <div class="col-md-6">
+								  <div class="form-group">
+									  <label class="bmd-label-floating">Letter Receive Date</label>
+									  <input type="text" class="form-control" name="txtReceiveDate" id="txtReceiveDate" readonly>
+								  </div>
+							  </div>
+						  </div>
+
+
 					  </fieldset>
                     <button type="reset" class="btn btn-danger pull-left">Reset</button>
                     <button type="submit" class="btn btn-primary pull-right" onclick="submitToServer('frmGrievence',event)">Register</button>
@@ -202,6 +214,11 @@
 		//load_ac("cboAc");
 		load_district("cboDist");
 	});
+	$("#txtReceiveDate").datepicker({
+		dateFormat:"dd-mm-yy",
+		maxDate:"+0D"
+	});
+	$("#txtReceiveDate").datepicker("setDate", new Date());
 	/*$("#cboBlock").change(function () {
     block=$(this).val();
     load_village("cboVillage");

@@ -155,7 +155,7 @@ function submitToServer(formid,e) {
 		data=frm.serialize();
 	}*/
 	data=new FormData(frm[0]);
-	if(updateid!=null){
+	if(updateid!=null && updateid.length>0){
 		data.append('txtId',updateid);
 	}
 	$.ajax({
