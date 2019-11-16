@@ -39,19 +39,24 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Sender</label>
-							<select name="cboFrom" id="cboFrom" class="form-control" onchange="callSenderReceiverForm(this,1)">
-								<option value="">Select Sender</option>
-								<option value="na">Other</option>
-							</select>
+								<select name="cboFrom" id="cboFrom" style="width: 100%" class="form-control" onchange="callSenderReceiverForm(this,1)">
+									<option value="">Select Sender</option>
+									<option value="na">Other</option>
+								</select>
+
+
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label class="bmd-label-floating">Receiver</label>
-							<select name="cboTo" id="cboTo" class="form-control" onchange="callSenderReceiverForm(this,2)">
+                          <label >Receiver</label>
+
+							<select name="cboTo" id="cboTo" style="width: 100%" class="form-control" onchange="callSenderReceiverForm(this,2)">
 								<option value="">Select Receiver</option>
 								<option value="na">Other</option>
 							</select>
+
+
                         </div>
                       </div>
                     </div>
@@ -219,8 +224,8 @@
 		maxDate:"+0D"
 	});
 	$("#txtReceiveDate").datepicker("setDate", new Date());
-	/*$("#cboBlock").change(function () {
-    block=$(this).val();
-    load_village("cboVillage");
-});*/
+
+
+	$("#cboFrom").select2();
+	$("#cboTo").select2();
 </script>

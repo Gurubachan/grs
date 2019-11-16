@@ -70,6 +70,8 @@
   <script src="<?= base_url('assets/js/material-dashboard.js" type="text/javascript')?>"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <!--<script src="<?/*= base_url('assets/demo/demo.js')*/?>"></script>-->
+
+  <script src="<?= base_url('assets/js/select2.full.min.js')?>"></script>
   <script src="<?= base_url('assets/js/app.js')?>"></script>
 
   <script>
