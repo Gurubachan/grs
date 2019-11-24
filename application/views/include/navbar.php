@@ -20,7 +20,7 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active  ">
-            <a class="nav-link" href="./Dashboard">
+            <a class="nav-link" href="./Dashboard" onclick="active_location='dashboard'">
               <i class="material-icons">dashboard</i>
               <p>Dashboard</p>
             </a>
@@ -47,22 +47,7 @@
 						<i class="material-icons">card_giftcard</i>
 						Request
 					</a>
-					<!--<a class="dropdown-item" href="#" onclick="getGrievance('Transfer')">
-						<i class="material-icons">flight_takeoff</i>
-						Transfer
-					</a>
-					<a class="dropdown-item" href="#" onclick="getGrievance('Invitation')">
-						<i class="material-icons">card_giftcard</i>
-						Invitation
-					</a>
-					<a class="dropdown-item" href="#">
-						<i class="material-icons">account_balance</i>
-						Financial Assistance
-					</a>
-					<a class="dropdown-item" href="#" onclick="getGrievance('Message')">
-						<i class="material-icons">mail</i>
-						Message
-					</a>-->
+
 				</div>
 			</li>
           <!--<li class="nav-item ">
@@ -178,4 +163,4 @@
         </div>
       </nav>
       <!-- End Navbar -->
-      
+

@@ -12,7 +12,8 @@ updateid="";
 var pc="";
 var ac="";
 var dcode="";
-
+var active_location="dashboard";
+var user_type=0;
 function load_pc(divid) {
 	$.ajax({
 		url:"./ServerPostResponse/load_pc",
@@ -86,9 +87,12 @@ function load_municipality(divid) {
 	});
 }
 /*End area mapping script*/
+var ht="500px";
 $("document").ready(function () {
 	loadGrievences('allGrievence');
 	getTodayGrievences('tbl_status_count');
+	$("#allGrivinaceloading").css({"height":ht,"overflow":"auto"});
+
 });
 
 function getGrievance(t) {
@@ -97,6 +101,7 @@ function getGrievance(t) {
 	}else {
 		alert("Invalid Form Type Request");
 	}
+	active_location="grivanceform";
 	$.ajax({
 		type: "GET",
 		url: "./Grievance/frmGrievance",
@@ -112,11 +117,12 @@ function getGrievance(t) {
 			loadSource('cboSource');
 			loadReferances('cboReferances');
 			load_pc('cboPc');
-			if(grievanceformtype==1 ){
+			if (grievanceformtype == 1) {
 				loadSendto('cboSendto');
 				$("#divMessageType").remove();
 				$("#heading").html("Genereate Grievence");
-			}else {
+				$(".card-header").removeClass('card-header-primary').addClass('card-header-success');
+			} else {
 				$("#divGrivance").remove();
 				loadMessageType('cboMessageType');
 				loadSeveourity('cboSeviourity');
@@ -126,7 +132,7 @@ function getGrievance(t) {
 			}
 			loadGrievences('allGrievence');
 			$("#loadContaint").show();
-
+			$("#cboType").focus();
 		}
 	});
 }
@@ -138,6 +144,10 @@ function getGrievanceReport() {
 		success: function (d) {
 			//console.log(d);
 			$("#loadReport").html(d);
+			 ht=$("#frmGrievence").height();
+			//alert(ht);
+			$("#allGrivinaceloading").css({"height":ht,"overflow":"auto"});
+			$("#grivance_details").removeClass("col-lg-6");
 		}
 	});
 }
@@ -155,7 +165,8 @@ function submitToServer(formid,e) {
 		data=frm.serialize();
 	}*/
 	data=new FormData(frm[0]);
-	if(updateid!=null && updateid.length>0){
+	if(updateid!=null && updateid>0){
+		alert(updateid);
 		data.append('txtId',updateid);
 	}
 	$.ajax({
@@ -175,9 +186,11 @@ function submitToServer(formid,e) {
 				var successresponse=responsedata.message;
 				if(formid=="frmGrievence"){
 					appendcontrol="allGrievence";
+					$("#cboType").focus();
 				}
 				loadDataAsPerRequest(appendcontrol,successresponse);
 				$(frm).trigger('reset');
+				$(frm).first().focus();
 				$("#myModal").modal('hide');
 				$("#containtLoadHere").html('');
 			}
@@ -320,7 +333,7 @@ function loadSource(dataloadingid=null,responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Source</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";
@@ -349,11 +362,11 @@ function getTodayGrievences(dataloadingid=null) {
 				//console.log(data);
 				for (var i = 0; i < data.length; i++) {
 					html+="<tr>\n" +
-						"\t\t\t\t\t<td>"+ j +"</td>\n" +
-						"\t\t\t\t\t<td>"+ data[i].name +"</td>\n" +
-						"\t\t\t\t\t<td>"+ data[i].subject +"</td>\n" +
-						"\t\t\t\t\t<td>"+ data[i].status +"</td>\n" +
-						"\t\t\t\t</tr>";
+						"<td>"+ j +"</td>\n" +
+						"<td>"+ data[i].name +"</td>\n" +
+						"<td>"+ data[i].subject +"</td>\n" +
+						"<td>"+ data[i].status +"</td>\n" +
+						"</tr>";
 					j++;
 				}
 				$("#"+dataloadingid).html(html);
@@ -368,108 +381,128 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		data: {linkid:grievanceformtype},
 		success: function (d) {
 			var responsedate=JSON.parse(d);
-			//console.log(responsedate);
+			console.log(responsedate);
 			if(responsedate.response==true){
 				var html="";
 				var data=responsedate.message;
 
 				for (var i=0; i<data.length;i++){
 					html+="<tr>\n" +
-						"\t\t\t\t\t\t\t\t<td>\n" +
-						"\t\t\t\t\t\t\t\t\t<div class=\"form-check\">\n" +
-						"\t\t\t\t\t\t\t\t\t\t<label class=\"form-check-label\">\n" +
-						"\t\t\t\t\t\t\t\t\t\t\t<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
-						"\t\t\t\t\t\t\t\t\t\t\t<span class=\"form-check-sign\">\n" +
+						"<td>\n" +
+						"<div class=\"form-check\">\n" +
+						"<label class=\"form-check-label\">\n" +
+						"<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
+						"<span class=\"form-check-sign\">\n" +
 						"<span class=\"check\"></span>\n" +
 						"</span>\n" +
-						"\t\t\t\t\t\t\t\t\t\t</label>\n" +
-						"\t\t\t\t\t\t\t\t\t</div>\n" +
-						"\t\t\t\t\t\t\t\t</td>\n" +
-						"\t\t\t\t\t\t\t\t<td>Refer By :"+data[i].referby +'<br> Subject :'+ data[i].subject+'<br> Body :'+ data[i].body +"</td>\n" +
-						"\t\t\t\t\t\t\t\t<td class=\"td-actions text-right\">\n" +
-						"\t\t\t\t\t\t\t\t\t<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
-						"\t\t\t\t\t\t\t\t\t\t<i class=\"material-icons\">streetview</i>\n" +
-						"\t\t\t\t\t\t\t\t\t</button>\n" +
-						"\t\t\t\t\t\t\t\t\t<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
-						"\t\t\t\t\t\t\t\t\t\t<i class=\"material-icons\">close</i>\n" +
-						"\t\t\t\t\t\t\t\t\t</button>\n" +
-						"\t\t\t\t\t\t\t\t</td>\n" +
-						"\t\t\t\t\t\t\t</tr>";
+						"</label>\n" +
+						"</div>\n" +
+						"</td>\n" +
+						"<td> Letter Type :" + data[i].type
+						+'<br> Refer By :'+ data[i].referby
+						+'<br> Subject :'+ data[i].subject
+						+'<br> Body :'+ data[i].body
+						+'<br> Date Of Receive :'+ data[i].date
+						+"</td>\n" +
+						"<td class=\"td-actions text-right\">\n" +
+						"<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
+						"<i class=\"material-icons\">streetview</i>\n" +
+						"</button>\n" +
+						"<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
+						"<i class=\"material-icons\">close</i>\n" +
+						"</button>\n" +
+						"</td>\n" +
+						"</tr>";
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
+				//$("#table_allGrivance").dataTable();
 				if(responsevalue!=null){
 					//alert(dataloadingid);
 					$("#"+dataloadingid).val(responsevalue);
 				}
+
 			}
 		}
 	});
 }
 function load_single_grivence(grivenceid) {
-	$("#myModal").modal().show();
-	updateid=grivenceid;
-	$.ajax({
-	   type: "POST",
-	   url: "./Grievance/loadGrievences",
-	   data: {gid:grivenceid},
-	   success: function (d) {
-	   		var data=JSON.parse(d);
-	   		if(data['response']!=false){
-	   			var records=data['message'];
-				var html="<div class=\"row\">\n" +
-					"<div class=\"col-md-12\">\n" +
-					"<div class=\"card\">\n" +
-					"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
-					"<h4 class=\"card-title\" id=\"heading\">View Tickets </h4>\n" +
-					"</div>\n" +
-					"<div class=\"card-body\" id='view_ticket_body'>";
-	   			 html+="<table class=\"table\">\n" +
-					"<tr>\n" +
-					"<td>From :</td>\n" +
-					"<td>"+ records[0].name +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Receive Date :</td>\n" +
-					"<td>"+ records[0].recivedate +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Subject :</td>\n" +
-					"<td>"+ records[0].subject +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Body :</td>\n" +
-					"<td>"+ records[0].body +"</td>\n" +
-					"</tr>\n" +
-					"<tr>\n" +
-					"<td>Attachment</td>\n" +
-					"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].file +" >View</a> </td>\n" +
-					"</tr>\n" +
-					"</table>";
-	   			 html+= "<fieldset>" +
-					 "<legend>Process To</legend>" +
-					 "<div class='row'>" +
-					 "<div class='col-lg-6 col-md-6 col-sm-6'>" +
-					 "<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Organisation</button>" +
-					 "</div> " +
-					 "<div class='col-lg-6 col-md-6 col-sm-6'>" +
-					 "<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Individual</button>" +
-					 "</div> " +
-					 "</div>"+
-					 "</fieldset>" ;
 
-	   			 html+="</div>\n" +
-					 "</div>";
-				html+="<div id='processto'></div>";
-				html+="<div class='card-footer'>" +
-					 "<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Process</button> " +
-					 "</div>" +
-					 "</div>\n" +
-					 "</div>";
-				$("#containtLoadHere").html(html);
+	//alert(grivenceid);
+	updateid=grivenceid;
+	if(active_location=="dashboard"){
+		$("#myModal").modal().show();
+		$.ajax({
+			type: "POST",
+			url: "./Grievance/loadGrievences",
+			data: {gid:grivenceid},
+			success: function (d) {
+				var data=JSON.parse(d);
+				if(data['response']!=false){
+					var records=data['message'];
+					var html="<div class=\"row\">\n" +
+						"<div class=\"col-md-12\">\n" +
+						"<div class=\"card\">\n" +
+						"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
+						"<h4 class=\"card-title\" id=\"heading\">View Tickets </h4>\n" +
+						"</div>\n" +
+						"<div class=\"card-body\" id='view_ticket_body'>";
+					html+="<table class=\"table\">\n" +
+						"<tr>\n" +
+						"<td>From :</td>\n" +
+						"<td>"+ records[0].name +"</td>\n" +
+						"</tr>\n" +
+						"<tr>\n" +
+						"<td>Receive Date :</td>\n" +
+						"<td>"+ records[0].recivedate +"</td>\n" +
+						"</tr>\n" +
+						"<tr>\n" +
+						"<td>Subject :</td>\n" +
+						"<td>"+ records[0].subject +"</td>\n" +
+						"</tr>\n" +
+						"<tr>\n" +
+						"<td>Body :</td>\n" +
+						"<td>"+ records[0].body +"</td>\n" +
+						"</tr>\n" +
+						"<tr>\n" +
+						"<td>Attachment</td>\n" +
+						"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].file +" >View</a> </td>\n" +
+						"</tr>\n" +
+						"</table>";
+
+					if(user_type != 2 && user_type!=0){
+						html+= "<fieldset>" +
+							"<legend>Process To</legend>" +
+							"<div class='row'>" +
+							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
+							"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Organisation</button>" +
+							"</div> " +
+							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
+							"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Individual</button>" +
+							"</div> " +
+							"</div>"+
+							"</fieldset>" ;
+					}
+
+
+					html+="</div>\n" +
+						"</div>";
+					html+="<div id='processto'></div>";
+					html+="<div class='card-footer'>" +
+						"<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Save</button> " +
+						"</div>" +
+						"</div>\n" +
+						"</div>";
+					$("#containtLoadHere").html(html);
+
+				}
 			}
-	   }
-	})
+		});
+	}else {
+		alert("Edit option comming soon");
+	}
+
+
 }
 function view_tickets_header() {
 	$("#view_ticket_body").toggle();
@@ -486,6 +519,7 @@ function call_grivance_forward_form() {
 		}
 
 });
+
 }
 
 function loadSendto(dataloadingid=null, responsevalue=null){
@@ -497,7 +531,7 @@ function loadSendto(dataloadingid=null, responsevalue=null){
 			var responsedate=JSON.parse(d);
 			if(responsedate.response==true){
 				var html="<option value=\"\">Select Send To</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";

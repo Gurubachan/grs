@@ -35,7 +35,8 @@ class Grievance extends CI_Controller
 	}
 	public function rptGrievance(){
 		try{
-			$this->load->view('grievance/rptGrievance');
+			//$this->load->view('grievance/rptGrievance');
+			$this->load->view('dashboard/grivance_details');
 		}catch (Exception $exception){
 			echo "Message:" .$exception->getMessage();
 		}
@@ -112,6 +113,10 @@ class Grievance extends CI_Controller
 				if (isset($cboIndividual)) {
 					$data[0]['individualid'] = $cboIndividual;
 				}
+				if (isset($txtReceiveDate) && $txtReceiveDate!="") {
+					$data[0]['receivedate']=date("Y-m-d",strtotime($txtReceiveDate));
+				}
+
 				if ($this->session->authdata['userid']) {
 					if(isset($txtId) && $txtId!=null){
 						$data[0]['updatedby'] = $this->session->authdata['userid'];
@@ -126,7 +131,7 @@ class Grievance extends CI_Controller
 					);
 				}
 				$data[0]['isactive']=1;
-				$data[0]['receivedate']=date("Y-m-d",strtotime($txtReceiveDate));
+
 				$new_name="";
 				$config['file_name'] = time().$_FILES["attachment"]['name'];;
 				$config['upload_path']   = 'uploads/';
@@ -174,33 +179,46 @@ class Grievance extends CI_Controller
 
 	public function loadGrievences(){
 		try{
-			$where=null;
-			$orderby=null;
+			$where=" isactive=1 ";
+			$orderby="id desc";
 			$groupby=null;
 			$limit=0;
 			if(isset($_POST)){
 				extract($_POST);
 				if(isset($date) && $date=="today"){
-					$where.="isactive=1 and status=1 and date(createdate)='".date('Y-m-d')."'";
+					$where.=" and status=1 and date(createdate)='".date('Y-m-d')."'";
 					$orderby="id desc";
 					$limit=5;
 				}
 				if(isset($gid) && $gid!=null){
-					$where.=" isactive = 1 and id=$gid ";
+					$where.="  and id=$gid ";
 				}
 			}
-			/*if(isset($_GET)){
+			$where_grivance_link="";
+			if(isset($_GET)){
 				extract($_GET);
 				if(isset($linkid) && $linkid!=null){
-					$where.="isactive =1 and status=1 and date(createdate)='".date('Y-m-d')."'";
+					$where_grivance_link="isactive =1  and linkid=$linkid";
 				}
-			}*/
+			}
+			$grievance_type=array();
+			$grievance_response=$this->Model_Default->select(1,$where_grivance_link);
+			if($grievance_response['response']!=false){
+				$grievance_type_data=$grievance_response['message'];
+				foreach ($grievance_type_data as $g){
+					$grievance_type[$g->id]=$g->tname;
+				}
+				$grivance_type=implode(",",(array_keys($grievance_type)));
+				$where.=" and gtype in ($grivance_type) ";
+			}
+
 			$response=$this->Model_Default->select(5, $where, $orderby, $groupby,$limit);
 
 			if($response['response']!=false){
 				$data=$response['message'];
 				$response_sender_receiver=$this->Model_Default->select(3,'isactive=1');
 				$sender=array();
+
 				if($response_sender_receiver['response']!=false){
 					$data_sender_receiver=$response_sender_receiver['message'];
 
@@ -212,17 +230,22 @@ class Grievance extends CI_Controller
 				$record=array();
 				if(count($sender)>0){
 					foreach ($data as $d){
+						$senderid=($d->senderid)>0?$sender[$d->senderid]:"";
+						$receiverid=($d->receiverid)>0?$sender[$d->receiverid]:"";
+						$grivancetype=($d->gtype)>0?$grievance_type[$d->gtype]:"";
 						$record[]=array(
 							'id'=>$d->id,
-							'name'=>$sender[$d->senderid],
-							'receiver'=>$sender[$d->receiverid],
+							'name'=>$senderid,
+							'receiver'=>$receiverid,
 							'subject'=>$d->subject,
 							'referby'=>$d->referanceno,
 							'subject'=>$d->subject,
 							'body'=>$d->body,
 							'recivedate'=>date("d-m-Y", strtotime($d->createdate)),
 							'file'=>$d->filelink,
-							'status'=>'Received'
+							'status'=>'Received',
+							'type'=>$grivancetype,
+							'date'=>$d->receivedate,
 							);
 					}
 					$message=array('response'=>true,'message'=>$record);

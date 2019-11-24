@@ -18,5 +18,8 @@
   <link href="<?= base_url('assets/demo/demo.css')?>" rel="stylesheet" />
   <link href="<?= base_url('assets/jquery-ui/jquery-ui.css')?>" rel="stylesheet" />
   <link href="<?= base_url('assets/css/select2.min.css')?>" rel="stylesheet" />
+
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/dataTables/DataTables-1.10.16/css/jquery.dataTables.css') ?>"/>
+	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/dataTables/Buttons-1.5.1/css/buttons.dataTables.css')?>"/>
 </head>
 <body class="">

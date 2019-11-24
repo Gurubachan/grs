@@ -9,7 +9,8 @@
                 <div class="card-body">
                   <form name="frmGrievence" id="frmGrievence" method="post"
 						action="<?= base_url('Grievance/insertGrievence')?>"
-						enctype="multipart/form-data">
+						enctype="multipart/form-data"
+				  >
 					  <fieldset >
 						  <legend>Ticket Type</legend>
 					  <div class="row">
@@ -228,4 +229,8 @@
 
 	$("#cboFrom").select2();
 	$("#cboTo").select2();
+
+	$(document).ready(function () {
+
+	});
 </script>

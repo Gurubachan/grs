@@ -13,10 +13,11 @@ class ServerPostResponse extends CI_Controller
 		parent::__construct();
 		isLogin('authdata');
 	}
+	public $server_path="http://61.12.81.38/cdms/";
 	public function load_pc(){
 		try{
 // set post
-			$ch = curl_init('http://61.12.81.38/cdms/PC/load_pc');
+			$ch = curl_init($this->server_path.'PC/load_pc');
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			//curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 // execute!
@@ -49,7 +50,7 @@ class ServerPostResponse extends CI_Controller
 	public function load_ac(){
 		try{
 			// set post
-			$ch = curl_init('http://61.12.81.38/cdms/AC/load_ac');
+			$ch = curl_init($this->server_path.'AC/load_ac');
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
 // execute!
@@ -83,7 +84,7 @@ class ServerPostResponse extends CI_Controller
 	public function get_distcode_on_ac(){
 		try{
 // set post
-			$ch = curl_init('http://61.12.81.38/cdms/AC/get_distcode_on_ac');
+			$ch = curl_init($this->server_path.'AC/get_distcode_on_ac');
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
 // execute!
@@ -115,7 +116,7 @@ class ServerPostResponse extends CI_Controller
 	public function load_block(){
 		try{
 // set post
-			$ch = curl_init('http://61.12.81.38/cdms/Block/load_block');
+			$ch = curl_init($this->server_path.'Block/load_block');
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
 

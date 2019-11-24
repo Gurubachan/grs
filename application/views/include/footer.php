@@ -1,6 +1,6 @@
 <footer class="footer" >
         <div class="container-fluid" >
-          <nav class="float-left" >
+         <!-- <nav class="float-left" >
             <ul>
               <li>
                 <a href="https://www.creative-tim.com">
@@ -23,7 +23,7 @@
                 </a>
               </li>
             </ul>
-          </nav>
+          </nav>-->
           <div class="copyright float-right">
             &copy;
             <script>
@@ -74,8 +74,25 @@
   <script src="<?= base_url('assets/js/select2.full.min.js')?>"></script>
   <script src="<?= base_url('assets/js/app.js')?>"></script>
 
+<script type="text/javascript" src="<?= base_url('assets/dataTables/JSZip-2.5.0/jszip.js') ?>"></script>
+<script type="text/javascript" src="<?= base_url('assets/dataTables/pdfmake-0.1.32/pdfmake.js') ?>"></script>
+<script type="text/javascript" src="<?= base_url('assets/dataTables/pdfmake-0.1.32/vfs_fonts.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/DataTables-1.10.16/js/jquery.dataTables.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/Buttons-1.5.1/js/dataTables.buttons.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/Buttons-1.5.1/js/buttons.colVis.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/Buttons-1.5.1/js/buttons.flash.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/Buttons-1.5.1/js/buttons.html5.js') ?>"></script>
+<script type="text/javascript"
+		src="<?= base_url('assets/dataTables/Buttons-1.5.1/js/buttons.print.js') ?>"></script>
+
   <script>
     $(document).ready(function() {
+		user_type="<?= $usertype ?>";
       $().ready(function() {
         $sidebar = $('.sidebar');
 

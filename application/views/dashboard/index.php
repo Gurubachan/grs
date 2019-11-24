@@ -1,7 +1,7 @@
 <div class="content" id="loadContaint">
 	<div class="container-fluid">
 		<?php include ('summary_box.php')?>
-		<?php include ('summary_chart.php')?>
+		<?php /*include ('summary_chart.php')*/?>
 		<div class="row">
 			<?php include ('grivance_details.php')?>
 			<?php include ('grivance_status_count.php')?>
@@ -10,7 +10,7 @@
 </div>
 
 <!-- The Modal -->
-<div class="modal fade" id="myModal">
+<div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog">
 		<div class="modal-content">
 
