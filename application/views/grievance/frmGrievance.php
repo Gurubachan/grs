@@ -40,23 +40,22 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Sender</label>
-								<select name="cboFrom" id="cboFrom" style="width: 100%" class="form-control" onchange="callSenderReceiverForm(this,1)">
+								<select name="cboFrom" id="cboFrom" style="width: 90%" class="form-control" onchange="callSenderReceiverForm(this,1)">
 									<option value="">Select Sender</option>
-									<option value="na">Other</option>
+									<option value="na">Not In List</option>
 								</select>
-
-
+							<a href="#" onclick="addSenderReceiver('cboFrom')"><i class="material-icons float-right" >add_circle</i></a>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label >Receiver</label>
 
-							<select name="cboTo" id="cboTo" style="width: 100%" class="form-control" onchange="callSenderReceiverForm(this,2)">
+							<select name="cboTo" id="cboTo" style="width: 90%" class="form-control" onchange="callSenderReceiverForm(this,2)">
 								<option value="">Select Receiver</option>
-								<option value="na">Other</option>
+								<option value="na">Not In List</option>
 							</select>
-
+							<a href="#" onclick="addSenderReceiver('cboTo')"> <i class="material-icons float-right" >add_circle</i></a>
 
                         </div>
                       </div>

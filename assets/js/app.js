@@ -797,7 +797,7 @@ function callSenderReceiverForm(t,stype) {
 				$("#containtLoadHere").html(d);
 				$(".x").removeClass('col-md-6').addClass('col-md-12');
 				appendcontrol=t.id;
-				$("#"+appendcontrol).val(stype);
+				$("#cboSenderReceiver").val(stype);
 				//$("#cboSenderReceiver").attr('disabled',true);
 				$(".card-title").html('Sender / Receiver Address Creation');
 			}
@@ -969,3 +969,7 @@ function callReferances(t) {
 		});
 	}
 }
+function addSenderReceiver(selector){
+	$("#"+selector).val("na").change().trigger();
+}
+
