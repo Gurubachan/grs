@@ -93,6 +93,11 @@
   <script>
     $(document).ready(function() {
 		user_type="<?= $usertype ?>";
+		$( ".accordion" ).accordion({
+			active: false,
+			collapsible: true,
+			heightStyle: "content"
+		});
       $().ready(function() {
         $sidebar = $('.sidebar');
 

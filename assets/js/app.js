@@ -14,6 +14,7 @@ var ac="";
 var dcode="";
 var active_location="dashboard";
 var user_type=0;
+var grievancedata="";
 function load_pc(divid) {
 	$.ajax({
 		url:"./ServerPostResponse/load_pc",
@@ -370,6 +371,7 @@ function getTodayGrievences(dataloadingid=null) {
 					j++;
 				}
 				$("#"+dataloadingid).html(html);
+
 				}
 			}
 	});
@@ -380,11 +382,11 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		url: "./Grievance/loadGrievences",
 		data: {linkid:grievanceformtype},
 		success: function (d) {
-			var responsedate=JSON.parse(d);
-			console.log(responsedate);
-			if(responsedate.response==true){
+			grievancedata=JSON.parse(d);
+			//console.log(grievancedata);
+			if(grievancedata.response==true){
 				var html="";
-				var data=responsedate.message;
+				var data=grievancedata.message.record;
 
 				for (var i=0; i<data.length;i++){
 					html+="<tr>\n" +
@@ -417,6 +419,7 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
 				//$("#table_allGrivance").dataTable();
+				grievance_count();
 				if(responsevalue!=null){
 					//alert(dataloadingid);
 					$("#"+dataloadingid).val(responsevalue);
@@ -439,7 +442,7 @@ function load_single_grivence(grivenceid) {
 			success: function (d) {
 				var data=JSON.parse(d);
 				if(data['response']!=false){
-					var records=data['message'];
+					var records=data['message']['record'];
 					var html="<div class=\"row\">\n" +
 						"<div class=\"col-md-12\">\n" +
 						"<div class=\"card\">\n" +
@@ -971,5 +974,97 @@ function callReferances(t) {
 }
 function addSenderReceiver(selector){
 	$("#"+selector).val("na").change().trigger();
+}
+
+function grievance_count() {
+	if(grievancedata.response == true){
+		console.log(grievancedata.message);
+		var grivancestatus=grievancedata.message.grievencestatus;
+		//len=Object.keys(grivancetype).length;
+		var html="";
+		var process_html="";
+		var resolve_html="";
+		var pending_html="";
+		var receive_html="";
+		var view_html="";
+
+		var count=0;
+		var total_receive_count=0;
+		var total_process_count=0;
+		var total_pending_count=0;
+		var total_resolve_count=0;
+		var total_view_count=0;
+
+		Object.keys(grivancestatus).forEach(function(gs) {
+
+			//console.log(gs);
+
+			if(gs == "Received"){
+				total_receive_count = total_receive_count + grivancestatus[gs];
+			}
+			if(gs == "View"){
+				total_view_count = total_view_count + grivancestatus[gs];
+			}
+			if(gs == "Process"){
+				total_process_count = total_process_count + grivancestatus[gs];
+			}
+			if(gs == "Resolved"){
+				total_resolve_count = total_resolve_count + grivancestatus[gs];
+			}
+			if(gs == "Pending"){
+				total_pending_count = total_pending_count + grivancestatus[gs];
+			}
+
+
+			var grivancetype=grievancedata.message.grievencetype[gs];
+			Object.keys(grivancetype).forEach(function (gt) {
+				//console.log(key, record[key]);
+				if(gs == "Received"){
+					receive_html += "<li>"
+						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+						+ "</li>";
+				}
+				if(gs == "View"){
+
+					view_html += "<li>"
+						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+						+ "</li>";
+				}
+				if(gs == "Process"){
+
+					process_html += "<li>"
+						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+						+ "</li>";
+				}
+				if(gs == "Resolved"){
+
+					resolve_html += "<li>"
+						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+						+ "</li>";
+				}
+				if(gs == "Pending"){
+					pending_html += "<li>"
+						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+						+ "</li>";
+				}
+
+
+			});
+		});
+		html=receive_html+view_html+process_html+pending_html+resolve_html;
+		$("#total").html(html);
+		$("#process").html(process_html);
+		$("#resolve").html(resolve_html);
+		$("#pending").html(pending_html);
+		count=total_receive_count+total_process_count+total_pending_count+total_resolve_count+total_view_count;
+
+		$("#total_count").html(count);
+		$("#total_process").html(total_process_count);
+		$("#total_pending").html(total_pending_count);
+		$("#total_resolve").html(total_resolve_count);
+	}
+	/*$("#summary_box .card-title").each(function () {
+		alert($(this).attr("id"));
+	});*/
 }
 

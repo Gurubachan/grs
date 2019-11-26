@@ -221,18 +221,33 @@ class Grievance extends CI_Controller
 
 				if($response_sender_receiver['response']!=false){
 					$data_sender_receiver=$response_sender_receiver['message'];
-
 					foreach ($data_sender_receiver as $sr){
 						$sender[$sr->id]=$sr->name;
 					}
 				}
-
+				$status=array();
+				$response_status=$this->Model_Default->select(18,'isactive=1');
+				if($response_status['response']!=false){
+					$data_status=$response_status['message'];
+					foreach ($data_status as $ds){
+						$status[$ds->id]=$ds->name;
+					}
+				}
 				$record=array();
 				if(count($sender)>0){
 					foreach ($data as $d){
 						$senderid=($d->senderid)>0?$sender[$d->senderid]:"";
 						$receiverid=($d->receiverid)>0?$sender[$d->receiverid]:"";
 						$grivancetype=($d->gtype)>0?$grievance_type[$d->gtype]:"";
+						$grivance_date=($d->status==1)?$d->createdate:$d->updatedate;
+						$currentdate=date("Y-m-d H:i:s");
+						$date_diff=strtotime($currentdate)-strtotime($grivance_date);
+
+						if($date_diff<86400){
+							$statusname=$status[$d->status];
+						}else{
+							$statusname='Pending';
+						}
 						$record[]=array(
 							'id'=>$d->id,
 							'name'=>$senderid,
@@ -243,12 +258,28 @@ class Grievance extends CI_Controller
 							'body'=>$d->body,
 							'recivedate'=>date("d-m-Y", strtotime($d->createdate)),
 							'file'=>$d->filelink,
-							'status'=>'Received',
+							'statuscode'=>$d->status,
+							'statusname'=>$statusname,
 							'type'=>$grivancetype,
 							'date'=>$d->receivedate,
+							'effectivedate'=>$grivance_date,
 							);
+						$records[$statusname][]=$grivancetype;
+						$status_records[]=$statusname;
 					}
-					$message=array('response'=>true,'message'=>$record);
+
+					//print_r($records);
+					$grievence_status=array_count_values($status_records);
+					$grievencetyepe_counts=array();
+					$unique_status=array_unique($status_records);
+					foreach ($unique_status as $v){
+						$grievencetyepe_counts[$v]=array_count_values($records[$v]);
+					}
+					//print_r($grievencetyepe_counts);
+					$datas['record']=$record;
+					$datas['grievencetype']=$grievencetyepe_counts;
+					$datas['grievencestatus']=$grievence_status;
+					$message=array('response'=>true,'message'=>$datas);
 				}else{
 					$message=array('response'=>false,'message'=>"invalid sender and receiver");
 				}

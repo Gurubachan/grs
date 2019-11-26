@@ -16684,7 +16684,7 @@ label {
 
 .card .card-footer .author,
 .card .card-footer .stats {
-  display: inline-flex;
+  display: inline-block;
 }
 
 .card .card-footer .stats {
