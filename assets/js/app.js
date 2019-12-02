@@ -491,10 +491,12 @@ function load_single_grivence(grivenceid) {
 					html+="</div>\n" +
 						"</div>";
 					html+="<div id='processto'></div>";
-					html+="<div class='card-footer'>" +
-						"<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Save</button> " +
-						"</div>" +
-						"</div>\n" +
+					if(user_type != 2 && user_type!=0) {
+						html += "<div class='card-footer'>" +
+							"<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Save</button> " +
+							"</div>";
+					}
+					html+=	"</div>\n" +
 						"</div>";
 					$("#containtLoadHere").html(html);
 
@@ -978,7 +980,7 @@ function addSenderReceiver(selector){
 
 function grievance_count() {
 	if(grievancedata.response == true){
-		console.log(grievancedata.message);
+		//console.log(grievancedata.message);
 		var grivancestatus=grievancedata.message.grievencestatus;
 		//len=Object.keys(grivancetype).length;
 		var html="";
