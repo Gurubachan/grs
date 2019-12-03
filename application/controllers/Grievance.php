@@ -52,6 +52,9 @@ class Grievance extends CI_Controller
 				if (isset($cboType)) {
 					$data[0]['gtype'] = $cboType;
 				}
+				if (isset($cboSubCategory)) {
+					$data[0]['gsubtype'] = $cboSubCategory;
+				}
 				if (isset($txtSubject)) {
 					$data[0]['subject'] = ucwords($txtSubject);
 				}
@@ -235,50 +238,56 @@ class Grievance extends CI_Controller
 				}
 				$record=array();
 				if(count($sender)>0){
-					foreach ($data as $d){
-						$senderid=($d->senderid)>0?$sender[$d->senderid]:"";
-						$receiverid=($d->receiverid)>0?$sender[$d->receiverid]:"";
-						$grivancetype=($d->gtype)>0?$grievance_type[$d->gtype]:"";
-						$grivance_date=($d->status==1)?$d->createdate:$d->updatedate;
-						$currentdate=date("Y-m-d H:i:s");
-						$date_diff=strtotime($currentdate)-strtotime($grivance_date);
+					if(isset($gid) && $gid!=""){
+						$record=$data;
+					}else{
+						foreach ($data as $d){
+							$senderid=($d->senderid)>0?$sender[$d->senderid]:"";
+							$receiverid=($d->receiverid)>0?$sender[$d->receiverid]:"";
+							$grivancetype=($d->gtype)>0?$grievance_type[$d->gtype]:"";
+							$grivance_date=($d->status==1)?$d->createdate:$d->updatedate;
+							$currentdate=date("Y-m-d H:i:s");
+							$date_diff=strtotime($currentdate)-strtotime($grivance_date);
 
-						if($date_diff<86400){
-							$statusname=$status[$d->status];
-						}else{
-							$statusname='Pending';
-						}
-						$record[]=array(
-							'id'=>$d->id,
-							'name'=>$senderid,
-							'receiver'=>$receiverid,
-							'subject'=>$d->subject,
-							'referby'=>$d->referanceno,
-							'subject'=>$d->subject,
-							'body'=>$d->body,
-							'recivedate'=>date("d-m-Y", strtotime($d->createdate)),
-							'file'=>$d->filelink,
-							'statuscode'=>$d->status,
-							'statusname'=>$statusname,
-							'type'=>$grivancetype,
-							'date'=>$d->receivedate,
-							'effectivedate'=>$grivance_date,
+							if($date_diff<86400){
+								$statusname=$status[$d->status];
+							}else{
+								$statusname='Pending';
+							}
+							$record[]=array(
+								'id'=>$d->id,
+								'name'=>$senderid,
+								'receiver'=>$receiverid,
+								'subject'=>$d->subject,
+								'referby'=>$d->referanceno,
+								'body'=>$d->body,
+								'recivedate'=>date("d-m-Y", strtotime($d->createdate)),
+								'file'=>$d->filelink,
+								'statuscode'=>$d->status,
+								'statusname'=>$statusname,
+								'type'=>$grivancetype,
+								'date'=>$d->receivedate,
+								'effectivedate'=>$grivance_date,
 							);
-						$records[$statusname][]=$grivancetype;
-						$status_records[]=$statusname;
+							$records[$statusname][]=$grivancetype;
+							$status_records[]=$statusname;
+						}
+						$grievence_status=array_count_values($status_records);
+						$grievencetyepe_counts=array();
+						$unique_status=array_unique($status_records);
+						foreach ($unique_status as $v){
+							$grievencetyepe_counts[$v]=array_count_values($records[$v]);
+						}
+						$datas['grievencetype']=$grievencetyepe_counts;
+						$datas['grievencestatus']=$grievence_status;
 					}
+
 
 					//print_r($records);
-					$grievence_status=array_count_values($status_records);
-					$grievencetyepe_counts=array();
-					$unique_status=array_unique($status_records);
-					foreach ($unique_status as $v){
-						$grievencetyepe_counts[$v]=array_count_values($records[$v]);
-					}
+
 					//print_r($grievencetyepe_counts);
 					$datas['record']=$record;
-					$datas['grievencetype']=$grievencetyepe_counts;
-					$datas['grievencestatus']=$grievence_status;
+
 					$message=array('response'=>true,'message'=>$datas);
 				}else{
 					$message=array('response'=>false,'message'=>"invalid sender and receiver");

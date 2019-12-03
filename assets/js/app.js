@@ -12,6 +12,7 @@ updateid="";
 var pc="";
 var ac="";
 var dcode="";
+var blockcode="";
 var active_location="dashboard";
 var user_type=0;
 var grievancedata="";
@@ -40,6 +41,9 @@ function load_ac(divid) {
 			if(res.response==true){
 				var data=res.message;
 				$("#"+divid).html(data);
+				if(ac!="" && ac>0){
+					$("#"+divid).val(ac).change();
+				}
 			}
 		}
 	})
@@ -83,6 +87,9 @@ function load_municipality(divid) {
 			if(res.response==true){
 				var data=res.message;
 				$("#"+divid).html(data);
+				if(blockcode!=null && blockcode>0){
+					$("#"+divid).val(blockcode);
+				}
 			}
 		}
 	});
@@ -120,17 +127,21 @@ function getGrievance(t) {
 			load_pc('cboPc');
 			if (grievanceformtype == 1) {
 				loadSendto('cboSendto');
-				$("#divMessageType").remove();
+				//$("#divMessageType").remove();
 				$("#heading").html("Genereate Grievence");
 				$(".card-header").removeClass('card-header-primary').addClass('card-header-success');
 			} else {
 				$("#divGrivance").remove();
-				loadMessageType('cboMessageType');
-				loadSeveourity('cboSeviourity');
+
 				$("#heading").html("Genereate Request");
 
-				$("#txtdateline").datepicker();
+
 			}
+			$("#txtdateline").datepicker({
+				minDate:"+0D"
+			});
+			loadMessageType('cboMessageType');
+			loadSeveourity('cboSeviourity');
 			loadGrievences('allGrievence');
 			$("#loadContaint").show();
 			$("#cboType").focus();
@@ -167,7 +178,7 @@ function submitToServer(formid,e) {
 	}*/
 	data=new FormData(frm[0]);
 	if(updateid!=null && updateid>0){
-		alert(updateid);
+		//alert(updateid);
 		data.append('txtId',updateid);
 	}
 	$.ajax({
@@ -262,7 +273,7 @@ function loadGrievenceType(dataloadingid=null,responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Category</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].tname+"</option>";
@@ -286,10 +297,10 @@ function loadGrievenceSubType(dataloadingid=null,responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Sub Category</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
-						html+="<option value="+data[i].id+" selected >"+data[i].stname+"</option>";
+						html+="<option value="+data[i].id+"  >"+data[i].stname+"</option>";
 						$("#"+dataloadingid).addClass('disabled');
 				}
 				//console.log(html);
@@ -387,7 +398,6 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 			if(grievancedata.response==true){
 				var html="";
 				var data=grievancedata.message.record;
-
 				for (var i=0; i<data.length;i++){
 					html+="<tr>\n" +
 						"<td>\n" +
@@ -429,20 +439,28 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		}
 	});
 }
+var single_grivance_data;
 function load_single_grivence(grivenceid) {
 
 	//alert(grivenceid);
 	updateid=grivenceid;
+
+	single_grivance_data=$.parseJSON($.ajax({
+		type: "POST",
+		url: "./Grievance/loadGrievences",
+		data: {gid:grivenceid},
+		dataType: "json",
+		async: false
+		/*success: function (d) {
+			var data= JSON.parse(d);
+		}*/
+		}).responseText);
 	if(active_location=="dashboard"){
 		$("#myModal").modal().show();
-		$.ajax({
-			type: "POST",
-			url: "./Grievance/loadGrievences",
-			data: {gid:grivenceid},
-			success: function (d) {
-				var data=JSON.parse(d);
-				if(data['response']!=false){
-					var records=data['message']['record'];
+		//data = JSON.parse(data);
+		//console.log(single_grivance_data);
+				if(single_grivance_data['response']!=false){
+					var records=single_grivance_data['message']['record'];
 					var html="<div class=\"row\">\n" +
 						"<div class=\"col-md-12\">\n" +
 						"<div class=\"card\">\n" +
@@ -500,13 +518,44 @@ function load_single_grivence(grivenceid) {
 						"</div>";
 					$("#containtLoadHere").html(html);
 
+				}else {
+					alert("Invalid data");
 				}
-			}
-		});
+
+
 	}else {
-		alert("Edit option comming soon");
+		var records=single_grivance_data['message']['record'];
+		console.log(records);
+		//Set data to form
+		$("#cboType").val(records[0].gtype).change();
+		$("#cboSubCategory").val(records[0].gsubtype).change();
+		$("#cboFrom").val(records[0].senderid).change();
+		$("#cboTo").val(records[0].receiverid).change();
+		$("#cboMessageType").val(records[0].message_type).change();
+		$("#cboSeviourity").val(records[0].seviourity).change();
+		$("#cboSource").val(records[0].source).change();
+		$("#cboReferances").val(records[0].referanceno).change();
+		$("#txtSubject").val(records[0].subject);
+		$("#txtMessage").html(records[0].body);
+		$("#cboPc").val(records[0].pccode).change();
+		let current_datetime = new Date(records[0].receivedate);
+		let formatted_date = current_datetime.getDate() + "-" + pad2(current_datetime.getMonth()+1) + "-" + current_datetime.getFullYear();
+		$("#txtReceiveDate").val(formatted_date);
+		ac=records[0].accode;
+		blockcode=records[0].blockcode;
+
+		//$("#cboAc").val(records[0].accode).change();
+		//$("#cboBlock").val(records[0].blockcode).change();
+
+
+		//alert("Edit option comming soon");
 	}
 
+
+}
+function pad2(number) {
+
+	return (number < 10 ? '0' : '') + number;
 
 }
 function view_tickets_header() {
@@ -562,7 +611,7 @@ function loadMinistry(dataloadingid=null, responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response==true){
 				var html="<option value=\"\">Select Ministry</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].ministry+"</option>";
@@ -591,7 +640,7 @@ function loadPSU(dataloadingid=null, responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response==true){
 				var html="<option value=\"\">Select PSU</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].psuname+"</option>";
@@ -617,7 +666,7 @@ function loadDepartment(dataloadingid=null, responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response==true){
 				var html="<option value=\"\">Select Department</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].dname+"</option>";
@@ -642,7 +691,7 @@ function loadDivision(dataloadingid=null, responsevalue=null) {
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Division</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";
@@ -668,7 +717,7 @@ function loadMessageType(dataloadingid=null, responsevalue=null){
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Message Type</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Other</option>";
+					"<option value=\"na\">Other</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";

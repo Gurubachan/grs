@@ -77,7 +77,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label class="bmd-label-floating">Seviourity</label>
+									<label class="bmd-label-floating">Priority</label>
 									<select name="cboSeviourity" id="cboSeviourity" class="form-control"
 											onchange="callSeviourity(this)">
 										<option value="">Select</option>
@@ -125,7 +125,7 @@
 						  <div class="col-md-12">
 							  <div class="form-group">
 								  <label class="bmd-label-floating">Subject</label>
-								  <input type="text" class="form-control" name="txtSubject">
+								  <input type="text" class="form-control" name="txtSubject" id="txtSubject">
 							  </div>
 						  </div>
 					  </div>
@@ -135,7 +135,7 @@
                           <label>Body</label>
                           <div class="form-group">
                             <label class="bmd-label-floating"> Content of the message for detail remarcation.</label>
-                            <textarea class="form-control" rows="5" name="txtMessage"></textarea>
+                            <textarea class="form-control" rows="5" name="txtMessage" id="txtMessage"></textarea>
                           </div>
                         </div>
                       </div>
@@ -224,7 +224,6 @@
 		maxDate:"+0D"
 	});
 	$("#txtReceiveDate").datepicker("setDate", new Date());
-
 
 	$("#cboFrom").select2();
 	$("#cboTo").select2();
