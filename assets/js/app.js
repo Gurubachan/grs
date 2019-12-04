@@ -170,13 +170,14 @@ function submitToServer(formid,e) {
 	e.preventDefault();
 	var frm=$("#"+formid);
 	var data="";
+	data=new FormData(frm[0]);
 	if(formid=="frmGrievence"){
 		$('#cboDist').removeAttr("disabled", false);
-
+		data.append('form',formid);
 	}/*else {
 		data=frm.serialize();
 	}*/
-	data=new FormData(frm[0]);
+
 	if(updateid!=null && updateid>0){
 		//alert(updateid);
 		data.append('txtId',updateid);
@@ -394,12 +395,12 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		data: {linkid:grievanceformtype},
 		success: function (d) {
 			grievancedata=JSON.parse(d);
-			//console.log(grievancedata);
+			console.log(grievancedata);
 			if(grievancedata.response==true){
 				var html="";
 				var data=grievancedata.message.record;
 				for (var i=0; i<data.length;i++){
-					html+="<tr>\n" +
+					html+="<tr class="+data[i].statusname +">\n" +
 						"<td>\n" +
 						"<div class=\"form-check\">\n" +
 						"<label class=\"form-check-label\">\n" +
@@ -411,10 +412,10 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 						"</div>\n" +
 						"</td>\n" +
 						"<td> Letter Type :" + data[i].type
-						+'<br> Refer By :'+ data[i].referby
-						+'<br> Subject :'+ data[i].subject
-						+'<br> Body :'+ data[i].body
-						+'<br> Date Of Receive :'+ data[i].date
+						+'<br> Refer By : '+ data[i].referby
+						+'<br> Subject : '+ data[i].subject
+						+'<br> Body : '+ data[i].body
+						+'<br> Date Of Receive : '+ data[i].date
 						+"</td>\n" +
 						"<td class=\"td-actions text-right\">\n" +
 						"<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
@@ -430,6 +431,27 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 				$("#"+dataloadingid).html(html);
 				//$("#table_allGrivance").dataTable();
 				grievance_count();
+
+
+
+				var view_html="";
+				$(".View").each(function () {
+					view_html+="<tr>"+$(this).html()+"</tr>";
+				});
+				$("#allviewed").html(view_html);
+
+				var pending_html="";
+				$(".Pending").each(function () {
+					pending_html+="<tr>"+$(this).html()+"</tr>";
+				});
+				$("#allPending").html(pending_html);
+
+				var resolve_html="";
+				$(".Resolved").each(function () {
+					resolve_html+="<tr>"+$(this).html()+"</tr>";
+				});
+				$("#allResolved").html(resolve_html);
+
 				if(responsevalue!=null){
 					//alert(dataloadingid);
 					$("#"+dataloadingid).val(responsevalue);
@@ -441,10 +463,7 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 }
 var single_grivance_data;
 function load_single_grivence(grivenceid) {
-
-	//alert(grivenceid);
 	updateid=grivenceid;
-
 	single_grivance_data=$.parseJSON($.ajax({
 		type: "POST",
 		url: "./Grievance/loadGrievences",
@@ -457,8 +476,7 @@ function load_single_grivence(grivenceid) {
 		}).responseText);
 	if(active_location=="dashboard"){
 		$("#myModal").modal().show();
-		//data = JSON.parse(data);
-		//console.log(single_grivance_data);
+
 				if(single_grivance_data['response']!=false){
 					var records=single_grivance_data['message']['record'];
 					var html="<div class=\"row\">\n" +
@@ -538,25 +556,23 @@ function load_single_grivence(grivenceid) {
 		$("#txtSubject").val(records[0].subject);
 		$("#txtMessage").html(records[0].body);
 		$("#cboPc").val(records[0].pccode).change();
-		let current_datetime = new Date(records[0].receivedate);
-		let formatted_date = current_datetime.getDate() + "-" + pad2(current_datetime.getMonth()+1) + "-" + current_datetime.getFullYear();
-		$("#txtReceiveDate").val(formatted_date);
+		if(records[0].receivedate!=null) {
+			$("#txtReceiveDate").val(dateformat(records[0].receivedate));
+		}
+		if(records[0].dateline!=null){
+			$("#txtdateline").val(dateformat(records[0].dateline));
+		}
 		ac=records[0].accode;
 		blockcode=records[0].blockcode;
-
-		//$("#cboAc").val(records[0].accode).change();
-		//$("#cboBlock").val(records[0].blockcode).change();
-
-
-		//alert("Edit option comming soon");
 	}
-
-
 }
 function pad2(number) {
-
 	return (number < 10 ? '0' : '') + number;
-
+}
+function dateformat(dates) {
+	let current_datetime = new Date(dates);
+	let formatted_date = current_datetime.getDate() + "-" + pad2(current_datetime.getMonth()+1) + "-" + current_datetime.getFullYear();
+	return formatted_date;
 }
 function view_tickets_header() {
 	$("#view_ticket_body").toggle();
@@ -742,7 +758,7 @@ function loadSeveourity(dataloadingid=null, responsevalue=null){
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Severity Type</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Other</option>";
+					"<option value=\"na\">Other</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";
@@ -766,7 +782,7 @@ function loadReferances(dataloadingid=null, responsevalue=null){
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Referances</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not in list</option>";
+					"<option value=\"na\">Not in list</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].referancename+"</option>";
@@ -828,7 +844,6 @@ function callSourceForm(t) {
 			url: "./Source/loadForm",
 			data: null,
 			success: function (d) {
-				//console.log(d);
 				$("#containtLoadHere").html(d);
 				appendcontrol=t.id;
 				$(".x").removeClass('col-md-6').addClass('col-md-12');
@@ -1071,35 +1086,43 @@ function grievance_count() {
 			Object.keys(grivancetype).forEach(function (gt) {
 				//console.log(key, record[key]);
 				if(gs == "Received"){
-					receive_html += "<li>"
-						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+					receive_html += "<li>"+
+					"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+					+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
+					+"</a>"
 						+ "</li>";
 				}
 				if(gs == "View"){
 
-					view_html += "<li>"
+					view_html += "<li>"+
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
-						+ "</li>";
+					+"</a>"
+					+ "</li>";
 				}
 				if(gs == "Process"){
 
-					process_html += "<li>"
+					process_html += "<li>"+
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
-						+ "</li>";
+					+"</a>"
+					+ "</li>";
 				}
 				if(gs == "Resolved"){
 
-					resolve_html += "<li>"
+					resolve_html += "<li>"+
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
-						+ "</li>";
+					+"</a>"
+					+ "</li>";
 				}
 				if(gs == "Pending"){
-					pending_html += "<li>"
+					pending_html += "<li>"+
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
-						+ "</li>";
+					+"</a>"
+					+ "</li>";
 				}
-
-
 			});
 		});
 		html=receive_html+view_html+process_html+pending_html+resolve_html;
@@ -1119,3 +1142,6 @@ function grievance_count() {
 	});*/
 }
 
+function get_grivance_by_category(category) {
+	alert(category);
+}

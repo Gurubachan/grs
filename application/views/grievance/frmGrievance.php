@@ -118,9 +118,7 @@
 							</select>
                         </div>
                       </div>
-
                     </div>
-
 					  <div class="row">
 						  <div class="col-md-12">
 							  <div class="form-group">
@@ -143,7 +141,6 @@
 					  </fieldset>
 					  <fieldset>
 						  <legend>Area Mapping Details</legend>
-
 					  <div class="row">
 						  <div class="col-md-3">
 							  <div class="form-group">
@@ -192,8 +189,6 @@
 								  </div>
 							  </div>
 						  </div>
-
-
 					  </fieldset>
                     <button type="reset" class="btn btn-danger pull-left">Reset</button>
                     <button type="submit" class="btn btn-primary pull-right" onclick="submitToServer('frmGrievence',event)">Register</button>
@@ -204,10 +199,8 @@
             </div>
 			  <div class="col-md-6" id="loadReport"></div>
 		  </div>
-
 		</div>
  </div>
-
 <script>
 	$("#cboPc").change(function () {
 		//alert($(this).val());
@@ -224,11 +217,6 @@
 		maxDate:"+0D"
 	});
 	$("#txtReceiveDate").datepicker("setDate", new Date());
-
 	$("#cboFrom").select2();
 	$("#cboTo").select2();
-
-	$(document).ready(function () {
-
-	});
 </script>

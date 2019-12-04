@@ -31,25 +31,32 @@
               <p>Log Ticket</p>
             </a>
           </li>-->
-			<li class="nav-item active">
-				<a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<i class="material-icons">person</i>
-					<p>
-						Register Grievance
-					</p>
-				</a>
-				<div class="dropdown-menu active" style="width: 89%" aria-labelledby="navbarDropdownProfile">
-					<a class="dropdown-item" href="#" onclick="getGrievance(1)">
-						<i class="material-icons">mail</i>
-						Grievances
+			<?php
+			if($usertype == 1 || $usertype == 2){
+			?>
+				<li class="nav-item active">
+					<a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="material-icons">person</i>
+						<p>
+							Register Grievance
+						</p>
 					</a>
-					<a class="dropdown-item" href="#" onclick="getGrievance(2)">
-						<i class="material-icons">card_giftcard</i>
-						Request
-					</a>
+					<div class="dropdown-menu active" style="width: 89%" aria-labelledby="navbarDropdownProfile">
+						<a class="dropdown-item" href="#" onclick="getGrievance(1)">
+							<i class="material-icons">mail</i>
+							Grievances
+						</a>
+						<a class="dropdown-item" href="#" onclick="getGrievance(2)">
+							<i class="material-icons">card_giftcard</i>
+							Request
+						</a>
 
-				</div>
-			</li>
+					</div>
+				</li>
+				<?php
+			}
+				?>
+
           <!--<li class="nav-item ">
             <a class="nav-link" href="./tables.html">
               <i class="material-icons">content_paste</i>

@@ -148,7 +148,7 @@ class Grievance extends CI_Controller
 					//print_r($uploadData);
 
 					 $uploadedFile = $uploadData['file_name'];
-					if(isset($txtId) && $txtId!=null){
+					if(isset($txtId) && $txtId!=null && isset($form) && $form!='frmGrievence'){
 						$data[0]['processfilelink']=base_url("uploads/$uploadedFile");
 					}else{
 						$data[0]['filelink']=base_url("uploads/$uploadedFile");
