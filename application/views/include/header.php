@@ -21,5 +21,6 @@
 
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/dataTables/DataTables-1.10.16/css/jquery.dataTables.css') ?>"/>
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/dataTables/Buttons-1.5.1/css/buttons.dataTables.css')?>"/>
+
 </head>
 <body class="">

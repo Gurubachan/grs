@@ -73,6 +73,7 @@
 
   <script src="<?= base_url('assets/js/select2.full.min.js')?>"></script>
   <script src="<?= base_url('assets/js/app.js')?>"></script>
+  <script src="<?= base_url('assets/js/reportjs.js')?>"></script>
 
 <script type="text/javascript" src="<?= base_url('assets/dataTables/JSZip-2.5.0/jszip.js') ?>"></script>
 <script type="text/javascript" src="<?= base_url('assets/dataTables/pdfmake-0.1.32/pdfmake.js') ?>"></script>

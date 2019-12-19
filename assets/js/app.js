@@ -168,16 +168,13 @@ function getGrievanceReport() {
 
 function submitToServer(formid,e) {
 	e.preventDefault();
+	$('#cboDist').removeAttr("disabled", false);
 	var frm=$("#"+formid);
 	var data="";
 	data=new FormData(frm[0]);
-	if(formid=="frmGrievence"){
-		$('#cboDist').removeAttr("disabled", false);
+	if(formid=="frmGrievence" ){
 		data.append('form',formid);
-	}/*else {
-		data=frm.serialize();
-	}*/
-
+	}
 	if(updateid!=null && updateid>0){
 		//alert(updateid);
 		data.append('txtId',updateid);
@@ -194,6 +191,7 @@ function submitToServer(formid,e) {
 		// data: frm.serialize(),
 		// data: frm.serialize(),
 		success: function (d) {
+			console.log(d);
 			var responsedata=JSON.parse(d);
 			if(responsedata.response == true){
 				var successresponse=responsedata.message;
@@ -201,6 +199,10 @@ function submitToServer(formid,e) {
 					appendcontrol="allGrievence";
 					$("#cboType").focus();
 				}
+				if(formid=="frmSearch"){
+					appendcontrol="searchReportArea";
+				}
+
 				loadDataAsPerRequest(appendcontrol,successresponse);
 				$(frm).trigger('reset');
 				$(frm).first().focus();
@@ -215,6 +217,7 @@ function submitToServer(formid,e) {
 			$("#containtLoadHere").html('');
 		}
 	});
+	$('#cboDist').prop("disabled", true);
 }
 function loadDataAsPerRequest(divid,responsedata) {
 	//var day;
@@ -260,6 +263,9 @@ function loadDataAsPerRequest(divid,responsedata) {
 			break;
 		case "cboReferances":
 			loadReferances(divid,responsedata);
+			break;
+		case "searchReportArea":
+			loadSearchReport(divid,responsedata);
 			break;
 	}
 	//return day;
@@ -325,7 +331,7 @@ function loadSenderReceiver(dataloadingid=null,responsevalue=null,sendertype=nul
 			var responsedate=JSON.parse(d);
 			if(responsedate.response == true){
 				var html="<option value=\"\">Select Sender</option>\n" +
-					"\t\t\t\t\t\t\t\t<option value=\"na\">Not In List</option>";
+					"<option value=\"na\">Not In List</option>";
 				var data=responsedate.message;
 				for (var i=0; i<data.length;i++){
 					html+="<option value="+data[i].id+">"+data[i].name+"</option>";
@@ -395,13 +401,13 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		data: {linkid:grievanceformtype},
 		success: function (d) {
 			grievancedata=JSON.parse(d);
-			console.log(grievancedata);
+			//console.log(grievancedata);
 			if(grievancedata.response==true){
 				var html="";
 				var data=grievancedata.message.record;
 				for (var i=0; i<data.length;i++){
 					html+="<tr class="+data[i].statusname +">\n" +
-						"<td>\n" +
+						"<td style='width: 10%'>" +
 						"<div class=\"form-check\">\n" +
 						"<label class=\"form-check-label\">\n" +
 						"<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
@@ -411,34 +417,42 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 						"</label>\n" +
 						"</div>\n" +
 						"</td>\n" +
-						"<td> Letter Type :" + data[i].type
+						"<td style='width: 60%'> Letter Type :" + data[i].type
 						+'<br> Refer By : '+ data[i].referby
 						+'<br> Subject : '+ data[i].subject
 						+'<br> Body : '+ data[i].body
 						+'<br> Date Of Receive : '+ data[i].date
 						+"</td>\n" +
-						"<td class=\"td-actions text-right\">\n" +
-						"<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
-						"<i class=\"material-icons\">streetview</i>\n" +
-						"</button>\n" +
-						"<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
+						"<td style='width: 10%'>" +
+							data[i].statusname
+						+"<br>" + data[i].effectivedate
+						+"</td>"+
+						"<td style='width: 10%'>" +
+							data[i].priority
+						+"</td>"+
+						"<td class='td-actions text-right' style='width: 10%'>";
+					if(data[i].statuscode<4){
+						html+="<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
+							"<i class=\"material-icons\">streetview</i>\n" +
+							"</button>\n";
+					}
+
+						html+="<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
 						"<i class=\"material-icons\">close</i>\n" +
 						"</button>\n" +
 						"</td>\n" +
-						"</tr>";
+						"</tr>"
+					;
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
 				//$("#table_allGrivance").dataTable();
 				grievance_count();
-
-
-
 				var view_html="";
 				$(".View").each(function () {
 					view_html+="<tr>"+$(this).html()+"</tr>";
 				});
-				$("#allviewed").html(view_html);
+				$("#allViewed").html(view_html);
 
 				var pending_html="";
 				$(".Pending").each(function () {
@@ -456,7 +470,6 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 					//alert(dataloadingid);
 					$("#"+dataloadingid).val(responsevalue);
 				}
-
 			}
 		}
 	});
@@ -467,7 +480,7 @@ function load_single_grivence(grivenceid) {
 	single_grivance_data=$.parseJSON($.ajax({
 		type: "POST",
 		url: "./Grievance/loadGrievences",
-		data: {gid:grivenceid},
+		data: {gid:grivenceid,location:active_location},
 		dataType: "json",
 		async: false
 		/*success: function (d) {
@@ -479,6 +492,7 @@ function load_single_grivence(grivenceid) {
 
 				if(single_grivance_data['response']!=false){
 					var records=single_grivance_data['message']['record'];
+					//console.log(records);
 					var html="<div class=\"row\">\n" +
 						"<div class=\"col-md-12\">\n" +
 						"<div class=\"card\">\n" +
@@ -502,22 +516,24 @@ function load_single_grivence(grivenceid) {
 						"<tr>\n" +
 						"<td>Body :</td>\n" +
 						"<td>"+ records[0].body +"</td>\n" +
-						"</tr>\n" +
-						"<tr>\n" +
-						"<td>Attachment</td>\n" +
-						"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].file +" >View</a> </td>\n" +
-						"</tr>\n" +
-						"</table>";
+						"</tr>" ;
+						if(records[0].filelink != ""){
+							html+="<tr>" +
+								"<td>Attachment</td>"+
+								"<td><a id='btnDownload' class='btn btn-success' target='_blank' href="+ records[0].filelink +" >View</a> </td>"+
+								"</tr>";
+						}
+						html+="</table>";
 
-					if(user_type != 2 && user_type!=0){
+					if(user_type != 2 && user_type != 0){
 						html+= "<fieldset>" +
 							"<legend>Process To</legend>" +
 							"<div class='row'>" +
 							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
-							"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Organisation</button>" +
+							"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Ministry - (Center / State)</button>" +
 							"</div> " +
 							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
-							"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Individual</button>" +
+							"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Company / Individual</button>" +
 							"</div> " +
 							"</div>"+
 							"</fieldset>" ;
@@ -535,7 +551,9 @@ function load_single_grivence(grivenceid) {
 					html+=	"</div>\n" +
 						"</div>";
 					$("#containtLoadHere").html(html);
-
+					if(user_type ==3 && user_type != 0){
+						changestatus();
+					}
 				}else {
 					alert("Invalid data");
 				}
@@ -543,7 +561,7 @@ function load_single_grivence(grivenceid) {
 
 	}else {
 		var records=single_grivance_data['message']['record'];
-		console.log(records);
+		//console.log(records);
 		//Set data to form
 		$("#cboType").val(records[0].gtype).change();
 		$("#cboSubCategory").val(records[0].gsubtype).change();
@@ -585,9 +603,9 @@ function call_grivance_forward_form() {
 		success: function (d) {
 			$("#processto").html(d);
 			$("#view_ticket_body").toggle();
-			loadSendto("cboSendto");
-		}
+			load_grievance_forwarded();
 
+		}
 });
 
 }
@@ -1144,4 +1162,58 @@ function grievance_count() {
 
 function get_grivance_by_category(category) {
 	alert(category);
+}
+/*
+* Report Function
+* Date: 05122019*/
+function load_report() {
+	$.ajax({
+		type: "GET",
+		url: "./Reports/loadReportForm",
+		data: null,
+		success: function (d) {
+			/*$.getScript('reportjs.js');*/
+			$("#loadContaint").hide();
+			$("#loadContaint").html(d);
+			$("#loadContaint").show();
+		}
+	});
+
+}
+
+/*
+* Grievance Forward Report
+* 15-12-2019*/
+
+function load_grievance_forwarded() {
+	$.ajax({
+		type: "POST",
+		url : "./Grievance/actionTakenReport",
+		data : {txtId:updateid},
+		success:function (d) {
+			var response=JSON.parse(d);
+			if(response.response!=false){
+				var records = response.message;
+				$("#grievance_forward_report").html(records);
+			}
+
+		}
+	})
+}
+
+/*Change grievence status from receive to view.*/
+function changestatus() {
+	//alert(1);
+	$.ajax({
+		type:"POST",
+		url: "./Grievance/insertGrievence",
+		data:{txtId: updateid,status:2},
+		success: function (d) {
+			var response=JSON.parse(d);
+			if(response.response!=false){
+				var record = response.message;
+				console.log(record);
+			}
+		}
+	})
 }

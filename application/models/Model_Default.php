@@ -32,7 +32,8 @@ class Model_Default extends CI_Model{
 				15=>'tbl_user_type',
 				16=>'tbl_user',
 				17=>'tbl_auth',
-				18=>'tbl_status'
+				18=>'tbl_status',
+				19=>'tbl_grievance_action'
             );
             if($table[$tblno]){
                 return $table[$tblno];

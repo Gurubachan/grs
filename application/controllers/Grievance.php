@@ -28,7 +28,7 @@ class Grievance extends CI_Controller
 	}
 	public function frmGrievanceForward(){
 		try{
-			$this->load->view('grievance/frmGrivanceForward');
+			$this->load->view('grievance/frmNewGrievanceForward');
 		}catch (Exception $exception){
 			echo "Message:" .$exception->getMessage();
 		}
@@ -47,79 +47,78 @@ class Grievance extends CI_Controller
 			//print_r($_POST);
 			if(isset($_POST)) {
 				extract($_POST);
-
-
 				if (isset($cboType)) {
 					$data[0]['gtype'] = $cboType;
 				}
-				if (isset($cboSubCategory)) {
+				if (isset($cboSubCategory) && $cboSubCategory!="") {
 					$data[0]['gsubtype'] = $cboSubCategory;
 				}
-				if (isset($txtSubject)) {
+				if (isset($txtSubject) && $txtSubject!="") {
 					$data[0]['subject'] = ucwords($txtSubject);
 				}
-				if (isset($cboReferances)) {
+				if (isset($cboReferances) && $cboReferances!="") {
 					$data[0]['referanceno'] = $cboReferances;
 				}
-				if (isset($cboSource)) {
+				if (isset($cboSource) && $cboSource!="") {
 					$data[0]['source'] = $cboSource;
 				}
-				if (isset($txtMessage)) {
+				if (isset($txtMessage) && $txtMessage!="") {
 					$data[0]['body'] = ucwords($txtMessage);
 				}
-				if (isset($cboFrom)) {
+				if (isset($cboFrom) && $cboFrom!="") {
 					$data[0]['senderid'] = $cboFrom;
 				}
-				if (isset($cboTo)) {
+				if (isset($cboTo) && $cboTo!="") {
 					$data[0]['receiverid'] = $cboTo;
 				}
-				if (isset($cboPc)) {
+				if (isset($cboPc) && $cboPc!="") {
 					$data[0]['pccode'] = $cboPc;
 				}
-				if (isset($cboAc)) {
+				if (isset($cboAc) && $cboAc!="") {
 					$data[0]['accode'] = $cboAc;
 				}
-				if (isset($cboDist)) {
+				if (isset($cboDist) && $cboDist!="") {
 					$data[0]['distcode'] = $cboDist;
 				}
-				if (isset($cboBlock)) {
+				if (isset($cboBlock) && $cboBlock!="") {
 					$data[0]['blockcode'] = $cboBlock;
-
 				}
-				if (isset($cboMessageType)) {
+				if (isset($cboMessageType) && $cboMessageType!="") {
 					$data[0]['message_type'] = $cboMessageType;
 				}
-				if (isset($cboSeviourity)) {
+				if (isset($cboSeviourity) && $cboSeviourity!="") {
 					$data[0]['seviourity'] = $cboSeviourity;
 				}
-				if (isset($txtdateline)) {
+				if (isset($txtdateline) && $txtdateline!="") {
 					$data[0]['dateline'] = date("y-m-d", strtotime($txtdateline));
 				}
-				if (isset($cboSendto)) {
+				if (isset($cboSendto) && $cboSendto!="") {
 					$data[0]['stid'] = $cboSendto;
 				}
-				if (isset($cbopsu)) {
+				if (isset($cbopsu) && $cbopsu!="") {
 					$data[0]['psu'] = $cbopsu;
 				}
-				if (isset($cboMinistry)) {
+				if (isset($cboMinistry) && $cboMinistry!="") {
 					$data[0]['ministry'] = $cboMinistry;
 				}
-				if (isset($cboDepartment)) {
+				if (isset($cboDepartment) && $cboDepartment!="") {
 					$data[0]['department'] = $cboDepartment;
 				}
-				if (isset($cboDivision)) {
+				if (isset($cboDivision) && $cboDivision!="") {
 					$data[0]['division'] = $cboDivision;
 				}
-				if (isset($txtRemark)) {
+				if (isset($txtRemark) && $txtRemark!="") {
 					$data[0]['remark'] = $txtRemark;
 				}
-				if (isset($cboIndividual)) {
+				if (isset($cboIndividual) && $cboIndividual!="") {
 					$data[0]['individualid'] = $cboIndividual;
 				}
 				if (isset($txtReceiveDate) && $txtReceiveDate!="") {
 					$data[0]['receivedate']=date("Y-m-d",strtotime($txtReceiveDate));
 				}
-
+				if(isset($status) && $status!=""){
+					$data[0]['status'] = $status;
+				}
 				if ($this->session->authdata['userid']) {
 					if(isset($txtId) && $txtId!=null){
 						$data[0]['updatedby'] = $this->session->authdata['userid'];
@@ -146,7 +145,6 @@ class Grievance extends CI_Controller
 				if($this->upload->do_upload('attachment')){
 					$uploadData = $this->upload->data();
 					//print_r($uploadData);
-
 					 $uploadedFile = $uploadData['file_name'];
 					if(isset($txtId) && $txtId!=null && isset($form) && $form!='frmGrievence'){
 						$data[0]['processfilelink']=base_url("uploads/$uploadedFile");
@@ -163,7 +161,6 @@ class Grievance extends CI_Controller
 				}else{
 					$response=$this->Model_Default->insert(5,$data);
 				}
-
 				if($response['response']!=false){
 					$message=array('response'=>true,'message'=>$response['message']);
 				}else{
@@ -205,69 +202,94 @@ class Grievance extends CI_Controller
 				}
 			}
 			$grievance_type=array();
-			$grievance_response=$this->Model_Default->select(1,$where_grivance_link);
+			/*$grievance_response=$this->Model_Default->select(1,$where_grivance_link);
 			if($grievance_response['response']!=false){
 				$grievance_type_data=$grievance_response['message'];
 				foreach ($grievance_type_data as $g){
 					$grievance_type[$g->id]=$g->tname;
 				}
-				$grivance_type=implode(",",(array_keys($grievance_type)));
-				$where.=" and gtype in ($grivance_type) ";
+
+			}*/
+			$this->load->library('GrievenceType');
+			$grievance_response=$this->grievencetype->get($where_grivance_link);
+			if($grievance_response['response']!=false){
+				$grievance_type=$grievance_response['data'];
+				$grievance_string=implode(",",(array_keys($grievance_type)));
+				$where.=" and gtype in ($grievance_string) ";
 			}
 
 			$response=$this->Model_Default->select(5, $where, $orderby, $groupby,$limit);
 
+			/*Load Priority*/
+			//$response_priority=$this->Model_Default->select(12,);
+			$priotity_array=array();
+
+			$this->load->library('Priority');
+			$response_priority=$this->priority->get("isactive=1");
+
+			if($response_priority['response']!=false){
+				$priotity_array=$response_priority['data'];
+			}
+
+			/*Load Referances*/
+			$this->load->library('Referance');
+			$response_referances=$this->referance->get("isactive=1");
+
+			$referances_array=array();
+			if($response_referances['response']!=false){
+				$referances_array=$response_referances['data'];
+			}
+			//print_r($referances_array);
 			if($response['response']!=false){
 				$data=$response['message'];
-				$response_sender_receiver=$this->Model_Default->select(3,'isactive=1');
+				$this->load->library('SenderReceiver');
+				$response_sender_receiver=$this->senderreceiver->get('isactive=1');
 				$sender=array();
 
 				if($response_sender_receiver['response']!=false){
-					$data_sender_receiver=$response_sender_receiver['message'];
-					foreach ($data_sender_receiver as $sr){
-						$sender[$sr->id]=$sr->name;
-					}
+					$sender=$response_sender_receiver['data'];
 				}
 				$status=array();
-				$response_status=$this->Model_Default->select(18,'isactive=1');
+				$this->load->library('Status');
+				$response_status=$this->status->get('isactive=1');
 				if($response_status['response']!=false){
-					$data_status=$response_status['message'];
-					foreach ($data_status as $ds){
-						$status[$ds->id]=$ds->name;
-					}
+					$status=$response_status['data'];
 				}
 				$record=array();
 				if(count($sender)>0){
-					if(isset($gid) && $gid!=""){
+					if(isset($gid) && $gid!="" && $location!="dashboard"){
 						$record=$data;
 					}else{
 						foreach ($data as $d){
-							$senderid=($d->senderid)>0?$sender[$d->senderid]:"";
-							$receiverid=($d->receiverid)>0?$sender[$d->receiverid]:"";
-							$grivancetype=($d->gtype)>0?$grievance_type[$d->gtype]:"";
-							$grivance_date=($d->status==1)?$d->createdate:$d->updatedate;
-							$currentdate=date("Y-m-d H:i:s");
-							$date_diff=strtotime($currentdate)-strtotime($grivance_date);
+							$senderid = ($d->senderid)>0 ? $sender[$d->senderid] : "";
+							$receiverid = ($d->receiverid)>0 ? $sender[$d->receiverid] : "";
+							$grivancetype = ($d->gtype)>0 ? $grievance_type[$d->gtype] : "";
+							$referby = ($d->referanceno)>0 ? $referances_array[$d->referanceno] : "";
+							$grivance_date = ($d->status==1) ? $d->createdate : $d->updatedate;
+							$currentdate = date("Y-m-d H:i:s");
+							$date_diff = strtotime($currentdate)-strtotime($grivance_date);
+							$time_gap=date_diff(date_create($grivance_date),date_create($currentdate));
 
-							if($date_diff<86400){
-								$statusname=$status[$d->status];
+							if($date_diff > 86400 && $d->status!=4){
+								$statusname = 'Pending Seens';
 							}else{
-								$statusname='Pending';
+								$statusname = $status[$d->status];
 							}
 							$record[]=array(
 								'id'=>$d->id,
 								'name'=>$senderid,
 								'receiver'=>$receiverid,
 								'subject'=>$d->subject,
-								'referby'=>$d->referanceno,
+								'referby'=>$referby,
 								'body'=>$d->body,
 								'recivedate'=>date("d-m-Y", strtotime($d->createdate)),
-								'file'=>$d->filelink,
+								'filelink'=>$d->filelink,
 								'statuscode'=>$d->status,
 								'statusname'=>$statusname,
 								'type'=>$grivancetype,
-								'date'=>$d->receivedate,
-								'effectivedate'=>$grivance_date,
+								'date'=>date("d-m-Y", strtotime($d->receivedate)),
+								'effectivedate'=>$time_gap->format("%r%a days %h hr %i min %s sec"),
+								'priority'=>($d->seviourity>0)?$priotity_array[$d->seviourity]:""
 							);
 							$records[$statusname][]=$grivancetype;
 							$status_records[]=$statusname;
@@ -342,7 +364,7 @@ class Grievance extends CI_Controller
 		}catch (Exception $exception){
 			$message=array(
 				'response'=>true,
-				'message'=>$this->db->affected_rows()
+				'message'=>$exception->getMessage()
 			);
 			echo json_encode($message);
 		}
@@ -355,7 +377,9 @@ class Grievance extends CI_Controller
 			if($response_from!=null){
 
 			}else{
-				$where.=" and linkid=$linkid ";
+				if(isset($linkid) && $linkid!=null){
+					$where.=" and linkid=$linkid ";
+				}
 			}
 			$response=$this->Model_Default->select(1,$where);
 			if($response['response']!=false){
@@ -428,6 +452,108 @@ class Grievance extends CI_Controller
 			}else{
 				$message=$response;
 			}
+			echo json_encode($message);
+		}catch (Exception $exception){
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
+		}
+	}
+
+	/*Grievance Action Taken Report
+	15-12-2019
+	*/
+	public function insertActioTaken(){
+		try {
+			//print_r($_POST);
+			if(isset($_POST)){
+				extract($_POST);
+				if(isset($txtForwardTo) && $txtForwardTo!=""){
+					$data[0]['forwardto']=ucwords($txtForwardTo);
+				}
+
+				if(isset($txtRemark) && $txtRemark!=""){
+					$data[0]['remark']=ucwords($txtRemark);
+				}
+				if(isset($txtReceiveDate) && $txtReceiveDate!=""){
+					$data[0]['letterdate']=date("y-m-d", strtotime($txtReceiveDate));
+				}
+				if(isset($txtId) && $txtId!=""){
+					$data[0]['grievenceid']=$txtId;
+				}else{
+					$message=array('response'=>false,'message'=>"Invalid Grievence Id");
+					echo json_encode($message);
+					exit();
+				}
+				if ($this->session->authdata['userid']) {
+						$data[0]['entryby'] = $this->session->authdata['userid'];
+				}else{
+					$message=array(
+						'message'=>false,
+						'response'=>'Unable to find session'
+					);
+					echo json_encode($message);
+					exit();
+				}
+				if( $this->session->authdata['usertype'] == 3){
+					if(isset($chkResolved) && $chkResolved!="" ){
+						$resolved[0]['status']=4;
+					}else{
+						$resolved[0]['status']=3;
+					}
+				}
+				$data[0]['status']=$resolved[0]['status'];
+				$new_name="";
+				$config['file_name'] = time().$_FILES["attachment"]['name'];;
+				$config['upload_path']   = 'uploads/';
+				$config['allowed_types'] = 'jpg|doc|docx|pdf';
+				$config['max_size']      = 5120;
+				$config['file_ext_tolower'] = TRUE;
+				$this->upload->initialize($config);
+
+				if($this->upload->do_upload('attachment')){
+					$uploadData = $this->upload->data();
+					//print_r($uploadData);
+					$uploadedFile = $uploadData['file_name'];
+					$data[0]['letterlink']=base_url("uploads/$uploadedFile");
+					$message['success_msg'] = 'File has been uploaded successfully.';
+				}else{
+					$message['error_msg'] = $this->upload->display_errors();
+				}
+				$response=$this->Model_Default->insert(19,$data);
+
+
+				$resolved[0]['updatedby']= $this->session->authdata['userid'];
+				$response=$this->Model_Default->update(5,$resolved,'id',$txtId);
+				$message=$response;
+				echo json_encode($message);
+			}
+		}catch (Exception $exception){
+			$message=array(
+				'response'=>false,
+				'message'=>$exception->getMessage()
+			);
+			echo json_encode($message);
+		}
+	}
+	public function actionTakenReport(){
+		try {
+			extract($_POST);
+			//print_r($_POST);
+			if(isset($txtId) && $txtId!=""){
+				$where="isactive=1 and grievenceid=$txtId";
+				$response=$this->Model_Default->select(19,$where);
+				if($response['response']!=false){
+					$data['records']=$response['message'];
+				}
+				$message=array(
+					'response'=>true,
+					'message'=>$this->load->view("grievance/rptGrievanceForward",$data,true),
+				);
+			}
+
 			echo json_encode($message);
 		}catch (Exception $exception){
 			$message=array(

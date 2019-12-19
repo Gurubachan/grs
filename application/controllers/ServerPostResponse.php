@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Gurubachan-Asus
@@ -6,6 +7,8 @@
  * Time: 12:39 PM
  */
 
+defined("BASEPATH") or exit('No direct script access allowed.');
+date_default_timezone_set("Asia/Kolkata");
 class ServerPostResponse extends CI_Controller
 {
 	public function __construct()
@@ -13,6 +16,7 @@ class ServerPostResponse extends CI_Controller
 		parent::__construct();
 		isLogin('authdata');
 	}
+	//public $server_path="http://203.112.143.203/cdms/";
 	public $server_path="http://61.12.81.38/cdms/";
 	public function load_pc(){
 		try{

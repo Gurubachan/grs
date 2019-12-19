@@ -30,8 +30,8 @@
 			</div>
 			<div class="card-body" id="allGrivinaceloading">
 				<div class="tab-content">
-					<div class="tab-pane active" id="profile">
-						<table class="table" id="table_allGrivance">
+					<div class="tab-pane active table-responsive" id="profile">
+						<table class="table" id="table_allGrivance" style="width: 100%">
 							<tbody id="allGrievence">
 
 							</tbody>

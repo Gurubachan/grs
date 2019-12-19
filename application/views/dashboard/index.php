@@ -11,7 +11,7 @@
 
 <!-- The Modal -->
 <div class="modal fade" id="myModal" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog">
+	<div class="modal-dialog" style="max-width: 50% !important;">
 		<div class="modal-content">
 
 			<!-- Modal Header -->

@@ -1,4 +1,4 @@
-<div class="col-lg-6 col-md-12" id="grivance_status_count">
+<div class="col-lg-12 col-md-12" id="grivance_status_count">
 	<div class="card">
 		<div class="card-header card-header-warning">
 			<h4 class="card-title">Grievence Status</h4>
