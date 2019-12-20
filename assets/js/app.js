@@ -581,7 +581,7 @@ function load_single_grivence(grivenceid) {
 			$("#txtdateline").val(dateformat(records[0].dateline));
 		}
 		if(records[0].filelink!=null){
-			$("#uploadDiv").append("<a id='btnDownload' class='btn btn-sm btn-success' target='_blank' href="+records[0].filelink+">View</a>");
+			$("#uploadDiv").html("<a id='btnDownload' class='btn btn-sm btn-success' target='_blank' href="+records[0].filelink+">View</a>");
 		}
 
 		ac=records[0].accode;

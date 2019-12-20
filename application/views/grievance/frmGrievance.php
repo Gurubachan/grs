@@ -183,9 +183,10 @@
 								  <input type="file" name="attachment" id="attachment" class="form-control" accept=".pdf,.docx,.doc,.jpg">
 							  </div>
 							  <div class="col-md-6">
-								  <div class="form-group" id="uploadDiv">
+								  <div class="form-group" >
 									  <label class="bmd-label-floating">Letter Receive Date</label>
 									  <input type="text" class="form-control" name="txtReceiveDate" id="txtReceiveDate" readonly>
+									  <div id="uploadDiv"></div>
 								  </div>
 							  </div>
 						  </div>
