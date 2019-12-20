@@ -271,7 +271,7 @@ class Grievance extends CI_Controller
 							$time_gap=date_diff(date_create($grivance_date),date_create($currentdate));
 
 							if($date_diff > 86400 && $d->status!=4){
-								$statusname = 'Pending Seens';
+								$statusname = 'Pending';
 							}else{
 								$statusname = $status[$d->status];
 							}

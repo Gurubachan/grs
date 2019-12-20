@@ -529,10 +529,10 @@ function load_single_grivence(grivenceid) {
 						html+= "<fieldset>" +
 							"<legend>Process To</legend>" +
 							"<div class='row'>" +
-							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
+							"<div class='col-lg-4 col-md-4 col-sm-4'>" +
 							"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Ministry - (Center / State)</button>" +
 							"</div> " +
-							"<div class='col-lg-6 col-md-6 col-sm-6'>" +
+							"<div class='col-lg-4 col-md-4 col-sm-4'>" +
 							"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Company / Individual</button>" +
 							"</div> " +
 							"</div>"+
@@ -580,6 +580,10 @@ function load_single_grivence(grivenceid) {
 		if(records[0].dateline!=null){
 			$("#txtdateline").val(dateformat(records[0].dateline));
 		}
+		if(records[0].filelink!=null){
+			$("#uploadDiv").append("<a id='btnDownload' class='btn btn-sm btn-success' target='_blank' href="+records[0].filelink+">View</a>");
+		}
+
 		ac=records[0].accode;
 		blockcode=records[0].blockcode;
 	}
