@@ -222,9 +222,10 @@ class Grievance extends CI_Controller
 
 			/*Load Priority*/
 			//$response_priority=$this->Model_Default->select(12,);
-			$priotity_array=array();
+
 
 			$this->load->library('Priority');
+			$priotity_array=array();
 			$response_priority=$this->priority->get("isactive=1");
 
 			if($response_priority['response']!=false){
