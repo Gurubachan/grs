@@ -256,6 +256,7 @@ class Grievance extends CI_Controller
 				if($response_status['response']!=false){
 					$status=$response_status['data'];
 				}
+				//print_r($status);
 				$record=array();
 				if(count($sender)>0){
 					if(isset($gid) && $gid!="" && $location!="dashboard"){
@@ -274,7 +275,8 @@ class Grievance extends CI_Controller
 							if($date_diff > 86400 && $d->status!=4){
 								$statusname = 'Pending';
 							}else{
-								$statusname = $status[$d->status];
+								$statusname =  ($d->status>0) ? $status[$d->status] : 0;
+								//echo($statusname);
 							}
 							$record[]=array(
 								'id'=>$d->id,

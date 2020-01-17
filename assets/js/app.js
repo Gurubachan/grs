@@ -204,7 +204,10 @@ function submitToServer(formid,e) {
 				}
 
 				loadDataAsPerRequest(appendcontrol,successresponse);
-				$(frm).trigger('reset');
+				if(formid!="frmSearch"){
+					$(frm).trigger('reset');
+				}
+
 				$(frm).first().focus();
 				$("#myModal").modal('hide');
 				$("#containtLoadHere").html('');
@@ -497,7 +500,7 @@ function load_single_grivence(grivenceid) {
 						"<div class=\"col-md-12\">\n" +
 						"<div class=\"card\">\n" +
 						"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
-						"<h4 class=\"card-title\" id=\"heading\">View Tickets </h4>\n" +
+						"<h4 class=\"card-title\" id=\"heading\">"+records[0].type+" </h4>\n" +
 						"</div>\n" +
 						"<div class=\"card-body\" id='view_ticket_body'>";
 					html+="<table class=\"table\">\n" +

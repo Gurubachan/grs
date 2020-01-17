@@ -13,12 +13,13 @@
 					<th>Subject</th>
 					<th>Message</th>
 					<th>Receive Date</th>
-<!--					<th>Receive From</th>-->
+					<th>Receive By</th>
+					<th>Referance</th>
 					<th>Priority</th>
 					<th>Status</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody class="text-small">
 			<?php
 			$i=0;
 			foreach ($grivance as $g){
@@ -29,18 +30,24 @@
 					<td>".$g['subject']."</td>
 					<td>".$g['body']."</td>
 					<td>".$g['recivedate']."</td>
+					<td>".$g['referby']."</td>
+					<td>".$g['receiver']."</td>
 					<td>".$g['priority']."</td>
-					<td>".$g['statusname']."</td>
-				
+					<td>".$g['statusname']."<br>".$g['effectivedate']."</td>
 				</tr>";
 			}
-
 			?>
-
 			</tbody>
 		</table>
 	</div>
 </div>
 <script>
-	$("#detailsReport").dataTable();
+	$("#detailsReport").dataTable({
+		"paging":   false,
+		scrollY:'55vh',
+		dom: 'Bfrtip',
+		buttons: [
+			'copy', 'csv', 'excel', 'pdf', 'print','colvis'
+		]
+	});
 </script>

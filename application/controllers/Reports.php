@@ -27,11 +27,24 @@ class Reports extends CI_Controller
 			//print_r($_POST);
 			extract($_POST);
 			$where="isactive=1 ";
+			$this->load->library(array('GrievenceType','Priority','Referance','SenderReceiver','Status'));
 		/*	if(isset($cboCategory) && ($cboCategory!="" || $cboCategory="na")){
 				$where.=" and gtype=$cboCategory ";
 			}*/
 			if(isset($cboType) && $cboType!="" && $cboType!="na"){
 				$where.=" and gtype=$cboType ";
+			}else{
+				if(isset($cboCategory) && $cboCategory!="" && $cboCategory!="na"){
+					$where_grivance_link="isactive =1  and linkid=$cboCategory";
+				}else{
+					$where_grivance_link="isactive =1 ";
+				}
+				$grievance_response=$this->grievencetype->get($where_grivance_link);
+				if($grievance_response['response']!=false){
+					$grievance_type=$grievance_response['data'];
+					$grievance_string=implode(",",(array_keys($grievance_type)));
+					$where.=" and gtype in ($grievance_string) ";
+				}
 			}
 			if(isset($cboSeviourity) && $cboSeviourity!="" && $cboSeviourity!="na"){
 				$where.=" and seviourity=$cboType ";
@@ -48,7 +61,7 @@ class Reports extends CI_Controller
 			}
 			//$message=array();
 
-			$this->load->library(array('GrievenceType','Priority','Referance','SenderReceiver','Status'));
+
 			$grievance_type=array();
 			$grievance_response=$this->grievencetype->get('isactive=1');
 			if($grievance_response['response']!=false){
