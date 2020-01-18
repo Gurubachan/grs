@@ -193,6 +193,7 @@ class Grievance extends CI_Controller
 				if(isset($gid) && $gid!=null){
 					$where.="  and id=$gid ";
 				}
+
 			}
 			$where_grivance_link="";
 			if(isset($_GET)){
@@ -200,16 +201,13 @@ class Grievance extends CI_Controller
 				if(isset($linkid) && $linkid!=null){
 					$where_grivance_link="isactive =1  and linkid=$linkid";
 				}
-			}
-			$grievance_type=array();
-			/*$grievance_response=$this->Model_Default->select(1,$where_grivance_link);
-			if($grievance_response['response']!=false){
-				$grievance_type_data=$grievance_response['message'];
-				foreach ($grievance_type_data as $g){
-					$grievance_type[$g->id]=$g->tname;
+				if(isset($category) && $category!=null){
+					$where_grivance_link="isactive =1 and tname='".$category."'";
 				}
+			}
+			//print_r($_GET);
+			$grievance_type=array();
 
-			}*/
 			$this->load->library('GrievenceType');
 			$grievance_response=$this->grievencetype->get($where_grivance_link);
 			if($grievance_response['response']!=false){
@@ -278,7 +276,8 @@ class Grievance extends CI_Controller
 								$statusname =  ($d->status>0) ? $status[$d->status] : 0;
 								//echo($statusname);
 							}
-							$record[]=array(
+
+							$record[$statusname][]=array(
 								'id'=>$d->id,
 								'name'=>$senderid,
 								'receiver'=>$receiverid,
@@ -311,6 +310,12 @@ class Grievance extends CI_Controller
 					//print_r($records);
 
 					//print_r($grievencetyepe_counts);
+					/*if(isset($status) && ($status!="" || $status!=null)){
+						$datas['record']=$record[$status];
+					}else{
+
+					}*/
+
 					$datas['record']=$record;
 
 					$message=array('response'=>true,'message'=>$datas);

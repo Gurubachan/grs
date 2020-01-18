@@ -404,48 +404,52 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 		data: {linkid:grievanceformtype},
 		success: function (d) {
 			grievancedata=JSON.parse(d);
-			//console.log(grievancedata);
+			//console.log(grievancedata.message.grievencestatus);
 			if(grievancedata.response==true){
 				var html="";
-				var data=grievancedata.message.record;
-				for (var i=0; i<data.length;i++){
-					html+="<tr class="+data[i].statusname +">\n" +
-						"<td style='width: 10%'>" +
-						"<div class=\"form-check\">\n" +
-						"<label class=\"form-check-label\">\n" +
-						"<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
-						"<span class=\"form-check-sign\">\n" +
-						"<span class=\"check\"></span>\n" +
-						"</span>\n" +
-						"</label>\n" +
-						"</div>\n" +
-						"</td>\n" +
-						"<td style='width: 60%'> Letter Type :" + data[i].type
-						+'<br> Refer By : '+ data[i].referby
-						+'<br> Subject : '+ data[i].subject
-						+'<br> Body : '+ data[i].body
-						+'<br> Date Of Receive : '+ data[i].date
-						+"</td>\n" +
-						"<td style='width: 10%'>" +
-							data[i].statusname
-						+"<br>" + data[i].effectivedate
-						+"</td>"+
-						"<td style='width: 10%'>" +
-							data[i].priority
-						+"</td>"+
-						"<td class='td-actions text-right' style='width: 10%'>";
-					if(data[i].statuscode<4){
-						html+="<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence("+ data[i].id +")' class=\"btn btn-primary btn-link btn-sm\">\n" +
-							"<i class=\"material-icons\">streetview</i>\n" +
-							"</button>\n";
-					}
+				for(key in grievancedata.message.grievencestatus) {
+					var data = grievancedata.message.record[key];
 
-						html+="<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
-						"<i class=\"material-icons\">close</i>\n" +
-						"</button>\n" +
-						"</td>\n" +
-						"</tr>"
-					;
+
+					for (var i = 0; i < data.length; i++) {
+						html += "<tr class=" + data[i].statusname + ">\n" +
+							"<td style='width: 10%'>" +
+							"<div class=\"form-check\">\n" +
+							"<label class=\"form-check-label\">\n" +
+							"<input class=\"form-check-input\" type=\"checkbox\" value=\"\" checked>\n" +
+							"<span class=\"form-check-sign\">\n" +
+							"<span class=\"check\"></span>\n" +
+							"</span>\n" +
+							"</label>\n" +
+							"</div>\n" +
+							"</td>\n" +
+							"<td style='width: 60%'> Letter Type :" + data[i].type
+							+ '<br> Refer By : ' + data[i].referby
+							+ '<br> Subject : ' + data[i].subject
+							+ '<br> Body : ' + data[i].body
+							+ '<br> Date Of Receive : ' + data[i].date
+							+ "</td>\n" +
+							"<td style='width: 10%'>" +
+							data[i].statusname
+							+ "<br>" + data[i].effectivedate
+							+ "</td>" +
+							"<td style='width: 10%'>" +
+							data[i].priority
+							+ "</td>" +
+							"<td class='td-actions text-right' style='width: 10%'>";
+						if (data[i].statuscode < 4) {
+							html += "<button type=\"button\" rel=\"tooltip\" title=\"View Task\" onclick='load_single_grivence(" + data[i].id + ")' class=\"btn btn-primary btn-link btn-sm\">\n" +
+								"<i class=\"material-icons\">streetview</i>\n" +
+								"</button>\n";
+						}
+
+						html += "<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
+							"<i class=\"material-icons\">close</i>\n" +
+							"</button>\n" +
+							"</td>\n" +
+							"</tr>"
+						;
+					}
 				}
 				//console.log(html);
 				$("#"+dataloadingid).html(html);
@@ -493,73 +497,78 @@ function load_single_grivence(grivenceid) {
 	if(active_location=="dashboard"){
 		$("#myModal").modal().show();
 
-				if(single_grivance_data['response']!=false){
-					var records=single_grivance_data['message']['record'];
-					//console.log(records);
-					var html="<div class=\"row\">\n" +
-						"<div class=\"col-md-12\">\n" +
-						"<div class=\"card\">\n" +
-						"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
-						"<h4 class=\"card-title\" id=\"heading\">"+records[0].type+" </h4>\n" +
-						"</div>\n" +
-						"<div class=\"card-body\" id='view_ticket_body'>";
-					html+="<table class=\"table\">\n" +
-						"<tr>\n" +
-						"<td>From :</td>\n" +
-						"<td>"+ records[0].name +"</td>\n" +
-						"</tr>\n" +
-						"<tr>\n" +
-						"<td>Receive Date :</td>\n" +
-						"<td>"+ records[0].recivedate +"</td>\n" +
-						"</tr>\n" +
-						"<tr>\n" +
-						"<td>Subject :</td>\n" +
-						"<td>"+ records[0].subject +"</td>\n" +
-						"</tr>\n" +
-						"<tr>\n" +
-						"<td>Body :</td>\n" +
-						"<td>"+ records[0].body +"</td>\n" +
-						"</tr>" ;
-						if(records[0].filelink != ""){
-							html+="<tr>" +
-								"<td>Attachment</td>"+
-								"<td><a id='btnDownload' class='btn btn-success' target='_blank' href="+ records[0].filelink +" >View</a> </td>"+
+				if(single_grivance_data['response']!=false) {
+					//single_grivance_data['message']['grievencestatus'];
+					for (key in single_grivance_data['message']['grievencestatus']) {
+						var records = single_grivance_data['message']['record'][key];
+						//console.log(records);
+						var html = "<div class=\"row\">\n" +
+							"<div class=\"col-md-12\">\n" +
+							"<div class=\"card\">\n" +
+							"<div class=\"card-header card-header-primary\" style='cursor: pointer' onclick='view_tickets_header()'>\n" +
+							"<h4 class=\"card-title\" id=\"heading\">" + records[0].type + " </h4>\n" +
+							"</div>\n" +
+							"<div class=\"card-body\" id='view_ticket_body'>";
+						html += "<table class=\"table\">\n" +
+							"<tr>\n" +
+							"<td>From :</td>\n" +
+							"<td>" + records[0].name + "</td>\n" +
+							"</tr>\n" +
+							"<tr>\n" +
+							"<td>Receive Date :</td>\n" +
+							"<td>" + records[0].recivedate + "</td>\n" +
+							"</tr>\n" +
+							"<tr>\n" +
+							"<td>Subject :</td>\n" +
+							"<td>" + records[0].subject + "</td>\n" +
+							"</tr>\n" +
+							"<tr>\n" +
+							"<td>Body :</td>\n" +
+							"<td>" + records[0].body + "</td>\n" +
+							"</tr>";
+						if (records[0].filelink != "") {
+							html += "<tr>" +
+								"<td>Attachment</td>" +
+								"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].filelink + " >View</a> </td>" +
 								"</tr>";
 						}
-						html+="</table>";
+						html += "</table>";
 
-					if(user_type != 2 && user_type != 0){
-						html+= "<fieldset>" +
-							"<legend>Process To</legend>" +
-							"<div class='row'>" +
-							"<div class='col-lg-4 col-md-4 col-sm-4'>" +
-							"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Ministry - (Center / State)</button>" +
-							"</div> " +
-							"<div class='col-lg-4 col-md-4 col-sm-4'>" +
-							"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Company / Individual</button>" +
-							"</div> " +
-							"</div>"+
-							"</fieldset>" ;
-					}
+						if (user_type != 2 && user_type != 0) {
+							html += "<fieldset>" +
+								"<legend>Process To</legend>" +
+								"<div class='row'>" +
+								"<div class='col-lg-4 col-md-4 col-sm-4'>" +
+								"<button name='btnOrganisation' id='btnOrganisation' onclick='call_grivance_forward_form()' class='btn btn-dark btn-block'>Ministry - (Center / State)</button>" +
+								"</div> " +
+								"<div class='col-lg-4 col-md-4 col-sm-4'>" +
+								"<button name='btnIndividual' id='btnIndividual' class='btn btn-dark btn-block'>Company / Individual</button>" +
+								"</div> " +
+								"</div>" +
+								"</fieldset>";
+						}
 
 
-					html+="</div>\n" +
-						"</div>";
-					html+="<div id='processto'></div>";
-					if(user_type != 2 && user_type!=0) {
-						html += "<div class='card-footer'>" +
-							"<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Save</button> " +
+						html += "</div>\n" +
 							"</div>";
+						html += "<div id='processto'></div>";
+						if (user_type != 2 && user_type != 0) {
+							html += "<div class='card-footer'>" +
+								"<button id='btnProcess' class='btn btn-success float-right' onclick=\"submitToServer('frmGrievanceProcess',event)\">Save</button> " +
+								"</div>";
+						}
+						html += "</div>\n" +
+							"</div>";
+						$("#containtLoadHere").html(html);
+						if (user_type == 3 && user_type != 0) {
+							changestatus();
+						}
 					}
-					html+=	"</div>\n" +
-						"</div>";
-					$("#containtLoadHere").html(html);
-					if(user_type ==3 && user_type != 0){
-						changestatus();
-					}
-				}else {
-					alert("Invalid data");
 				}
+				else
+					{
+						alert("Invalid data");
+					}
 
 
 	}else {
@@ -1112,7 +1121,7 @@ function grievance_count() {
 				//console.log(key, record[key]);
 				if(gs == "Received"){
 					receive_html += "<li>"+
-					"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+					"<a href='#' onclick=\"get_grivance_by_category('"+gt+"','"+gs+"')\">"
 					+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
 					+"</a>"
 						+ "</li>";
@@ -1120,7 +1129,7 @@ function grievance_count() {
 				if(gs == "View"){
 
 					view_html += "<li>"+
-						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"','"+gs+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
 					+"</a>"
 					+ "</li>";
@@ -1128,7 +1137,7 @@ function grievance_count() {
 				if(gs == "Process"){
 
 					process_html += "<li>"+
-						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"','"+gs+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
 					+"</a>"
 					+ "</li>";
@@ -1136,14 +1145,14 @@ function grievance_count() {
 				if(gs == "Resolved"){
 
 					resolve_html += "<li>"+
-						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"','"+gs+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
 					+"</a>"
 					+ "</li>";
 				}
 				if(gs == "Pending"){
 					pending_html += "<li>"+
-						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"')\">"
+						"<a href='#' onclick=\"get_grivance_by_category('"+gt+"','"+gs+"')\">"
 						+ gt + ' : ' + "<span class='float-right'>" + grivancetype[gt] + "</span>"
 					+"</a>"
 					+ "</li>";
@@ -1167,8 +1176,35 @@ function grievance_count() {
 	});*/
 }
 
-function get_grivance_by_category(category) {
-	alert(category);
+function get_grivance_by_category(category,status) {
+	//console.log(grievancedata.message.record[status]);
+	$('#tblCategoryWiseReport').DataTable().destroy();
+	var data=grievancedata.message.record[status];
+	var html="";
+	for (var i = 0; i < data.length; i++){
+		if(category===data[i].type){
+			//console.log(data[i])
+			html += "<tr>\n" +
+				"<td>"+data[i].name+"</td>\n" +
+				"<td>"+data[i].subject+"</td>\n" +
+				"<td>"+data[i].body+"</td>\n" +
+				"<td>"+data[i].recivedate+"</td>\n" +
+				"</tr>"
+		}
+	}
+	$("#divCategoryWiseReportSection").show();
+	$("#headerData").html(category);
+	$("#CategoryWiseReport").html(html);
+	$("#tblCategoryWiseReport").dataTable();
+	/*$.ajax({
+		type: "GET",
+		url: "./Grievance/loadGrievences",
+		data: {category:category,status:status},
+		success: function(data) {
+			var data= JSON.parse(data);
+			console.log(data.message.record[status]);
+		}
+	})*/
 }
 /*
 * Report Function

@@ -105,5 +105,30 @@
 		</div>
 	</div >
 
-
-
+	<div class="col-lg-12 col-md-12" id="divCategoryWiseReportSection" style="display:none">
+		<div class="card">
+			<div class="card-header card-header-success" id="headerData">
+				Testing
+			</div>
+			<div class="card-body">
+				<table class="table table-striped table-hover table-bordered" id="tblCategoryWiseReport">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Subject</th>
+							<th>Body</th>
+							<th>Receive Date</th>
+						</tr>
+					</thead>
+					<tbody id="CategoryWiseReport">
+						<tr>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
