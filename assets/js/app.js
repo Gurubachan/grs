@@ -1195,7 +1195,16 @@ function get_grivance_by_category(category,status) {
 	$("#divCategoryWiseReportSection").show();
 	$("#headerData").html(category);
 	$("#CategoryWiseReport").html(html);
-	$("#tblCategoryWiseReport").dataTable();
+	$("#tblCategoryWiseReport").dataTable({
+		dom: 'Bfrtip',
+		buttons: [
+			'copy',
+			'csv',
+			'excel',
+			'pdf',
+		],
+		select: true
+	});
 	/*$.ajax({
 		type: "GET",
 		url: "./Grievance/loadGrievences",
