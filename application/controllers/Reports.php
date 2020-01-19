@@ -58,6 +58,8 @@ class Reports extends CI_Controller
 			$response=$this->Model_Default->select(5,$where);
 			if($response['response']!=false){
 				$data=$response['message'];
+			}else{
+				$data=false;
 			}
 			//$message=array();
 
@@ -91,6 +93,7 @@ class Reports extends CI_Controller
 			if($response_priority['response']!=false){
 				$priotity_array=$response_priority['data'];
 			}
+			if($data!=false){
 			foreach($data as $d){
 				$senderid = ($d->senderid)>0 ? $sender[$d->senderid] : "";
 				$receiverid = ($d->receiverid)>0 ? $sender[$d->receiverid] : "";
@@ -106,7 +109,7 @@ class Reports extends CI_Controller
 				}else{
 					$statusname = $status[$d->status];
 				}
-				$data['grivance'][]=array(
+				$records['grivance'][]=array(
 					'id'=>$d->id,
 					'name'=>$senderid,
 					'receiver'=>$receiverid,
@@ -122,19 +125,22 @@ class Reports extends CI_Controller
 					'effectivedate'=>$time_gap->format("%r%a days %h hr %i min %s sec"),
 					'priority'=>($d->seviourity>0)?$priotity_array[$d->seviourity]:""
 				);
+				$summaryrecords['category'][$grivancetype][]=$statusname;
+
 			}
+
 			if(isset($cboRptType)){
 				switch ($cboRptType){
 					case 1:
 						$message=array(
 							'response'=>true,
-							'message'=>'',
+							'message'=>$this->load->view("report/rptSummary",$summaryrecords,true),
 						);
 						break;
 					case 2:
 						$message=array(
 							'response'=>true,
-							'message'=>$this->load->view("report/rptSearch",$data,true),
+							'message'=>$this->load->view("report/rptSearch",$records,true),
 						);
 						break;
 					case 3:
@@ -144,6 +150,12 @@ class Reports extends CI_Controller
 						);
 						break;
 				}
+			}
+			}else{
+				$message=array(
+					'response'=>false,
+					'message'=>'Unable to fetch any data'
+				);
 			}
 			echo json_encode($message);
 		}catch (Exception $exception){

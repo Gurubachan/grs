@@ -191,7 +191,7 @@ function submitToServer(formid,e) {
 		// data: frm.serialize(),
 		// data: frm.serialize(),
 		success: function (d) {
-			console.log(d);
+			//console.log(d);
 			var responsedata=JSON.parse(d);
 			if(responsedata.response == true){
 				var successresponse=responsedata.message;
@@ -211,6 +211,8 @@ function submitToServer(formid,e) {
 				$(frm).first().focus();
 				$("#myModal").modal('hide');
 				$("#containtLoadHere").html('');
+			}else{
+				alert(responsedata.message);
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
