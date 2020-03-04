@@ -16,8 +16,8 @@ class ServerPostResponse extends CI_Controller
 		parent::__construct();
 		isLogin('authdata');
 	}
-	//public $server_path="http://203.112.143.203/cdms/";
-	public $server_path="http://61.12.81.38/cdms/";
+	public $server_path="http://203.112.143.203/cdms/";
+	//public $server_path="http://61.12.81.38/cdms/";
 	public function load_pc(){
 		try{
 // set post

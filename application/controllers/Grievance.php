@@ -119,6 +119,14 @@ class Grievance extends CI_Controller
 				if(isset($status) && $status!=""){
 					$data[0]['status'] = $status;
 				}
+				if(isset($isactive) && $isactive!=""){
+					if($this->session->authdata['userid']==1){
+						$data[0]['isactive'] = $isactive;
+					}
+				}else{
+					$data[0]['isactive']=1;
+				}
+
 				if ($this->session->authdata['userid']) {
 					if(isset($txtId) && $txtId!=null){
 						$data[0]['updatedby'] = $this->session->authdata['userid'];
@@ -132,30 +140,34 @@ class Grievance extends CI_Controller
 						'response'=>'Unable to find session'
 					);
 				}
-				$data[0]['isactive']=1;
 
-				$new_name="";
-				$config['file_name'] = time().$_FILES["attachment"]['name'];;
-				$config['upload_path']   = 'uploads/';
-				$config['allowed_types'] = 'jpg|doc|docx|pdf';
-				$config['max_size']      = 5120;
-				$config['file_ext_tolower'] = TRUE;
-				$this->upload->initialize($config);
 
-				if($this->upload->do_upload('attachment')){
-					$uploadData = $this->upload->data();
-					//print_r($uploadData);
-					 $uploadedFile = $uploadData['file_name'];
-					if(isset($txtId) && $txtId!=null && isset($form) && $form!='frmGrievence'){
-						$data[0]['processfilelink']=base_url("uploads/$uploadedFile");
+
+
+				if(isset($form) && $form!='frmGrievence'){
+					$new_name="";
+					$config['file_name'] = time().$_FILES["attachment"]['name'];;
+					$config['upload_path']   = 'uploads/';
+					$config['allowed_types'] = 'jpg|doc|docx|pdf';
+					$config['max_size']      = 5120;
+					$config['file_ext_tolower'] = TRUE;
+					$this->upload->initialize($config);
+					if($this->upload->do_upload('attachment')){
+						$uploadData = $this->upload->data();
+						//print_r($uploadData);
+						$uploadedFile = $uploadData['file_name'];
+						if(isset($txtId) && $txtId!=null ){
+							$data[0]['processfilelink']=base_url("uploads/$uploadedFile");
+						}else{
+							$data[0]['filelink']=base_url("uploads/$uploadedFile");
+						}
+
+						$message['success_msg'] = 'File has been uploaded successfully.';
 					}else{
-						$data[0]['filelink']=base_url("uploads/$uploadedFile");
+						$message['error_msg'] = $this->upload->display_errors();
 					}
-
-					$message['success_msg'] = 'File has been uploaded successfully.';
-				}else{
-					$message['error_msg'] = $this->upload->display_errors();
 				}
+
 				if(isset($txtId) && $txtId!=null){
 					$response=$this->Model_Default->update(5,$data,'id',$txtId);
 				}else{

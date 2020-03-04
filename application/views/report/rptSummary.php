@@ -11,8 +11,8 @@
 ?>
 <div class="card ">
 	<h4 class="card-header card-header-primary">Reports</h4>
-	<div class="card-body">
-		<table class="table" id="detailsReport">
+	<div class="card-body table-responsive">
+		<table class="table" id="SummayReport">
 			<thead>
 			<tr>
 				<th>Sl#</th>
@@ -50,12 +50,12 @@
 
 				</tr>";
 			}
-			foreach ($category as $g){
-
-			}
+			
 			?>
 			</tbody>
 		</table>
 	</div>
 </div>
-
+<script>
+	$("#SummayReport").dataTable();
+</script>

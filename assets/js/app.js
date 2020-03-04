@@ -445,7 +445,7 @@ function loadGrievences(dataloadingid=null,responsevalue=null) {
 								"</button>\n";
 						}
 
-						html += "<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\">\n" +
+						html += "<button type=\"button\" rel=\"tooltip\" title=\"Remove\" class=\"btn btn-danger btn-link btn-sm\" onclick='disable_single_grivence(" + data[i].id + ")'>\n" +
 							"<i class=\"material-icons\">close</i>\n" +
 							"</button>\n" +
 							"</td>\n" +
@@ -528,7 +528,7 @@ function load_single_grivence(grivenceid) {
 							"<td>Body :</td>\n" +
 							"<td>" + records[0].body + "</td>\n" +
 							"</tr>";
-						if (records[0].filelink != "") {
+						if (records[0].filelink != "" && records[0].filelink !=null) {
 							html += "<tr>" +
 								"<td>Attachment</td>" +
 								"<td><a id='btnDownload' class='btn btn-success' target='_blank' href=" + records[0].filelink + " >View</a> </td>" +
@@ -1267,6 +1267,26 @@ function changestatus() {
 			if(response.response!=false){
 				var record = response.message;
 				console.log(record);
+			}
+		}
+	})
+}
+
+/*Disable grievance */
+function disable_single_grivence(id){
+	/*alert(id);
+	exit(0);*/
+	$.ajax({
+		type:"POST",
+		url: "./Grievance/insertGrievence",
+		data:{txtId: id,isactive:0},
+		success: function (d) {
+			var response=JSON.parse(d);
+			if(response.response!=false){
+				var record = response.message;
+				console.log(record);
+			}else{
+				console.log(response.message);
 			}
 		}
 	})
